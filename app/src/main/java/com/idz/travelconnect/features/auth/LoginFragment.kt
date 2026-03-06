@@ -29,6 +29,14 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        // Auto-login (remember me) on app launch logic
+        val currentUser = com.idz.travelconnect.data.repository.auth.AuthRepository.shared.currentUser
+        if (currentUser != null && currentUser.email != null) {
+            val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment(currentUser.email!!)
+            findNavController().navigate(action)
+            return // Skip further setup for login
+        }
+
         setupListeners()
         setupObservers()
     }
