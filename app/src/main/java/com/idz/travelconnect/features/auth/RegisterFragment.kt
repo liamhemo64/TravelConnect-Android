@@ -33,17 +33,45 @@ class RegisterFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnRegister.setOnClickListener {
-            val displayName = binding.etDisplayName.text.toString()
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
-            val confirm = binding.etConfirmPassword.text.toString()
+            val displayName = binding.etDisplayName.text?.toString()?.trim() ?: ""
+            val email = binding.etEmail.text?.toString()?.trim() ?: ""
+            val password = binding.etPassword.text?.toString() ?: ""
+            val confirm = binding.etConfirmPassword.text?.toString() ?: ""
 
-            if (displayName.isBlank() || email.isBlank() || password.isBlank() || confirm.isBlank()) {
-                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            var isValid = true
+
+            if (displayName.isBlank()) {
+                binding.etDisplayName.error = "Display Name is required"
+                isValid = false
             }
 
-            viewModel.register(displayName, email, password, confirm)
+            if (email.isBlank()) {
+                binding.etEmail.error = "Email is required"
+                isValid = false
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.etEmail.error = "Valid email is required"
+                isValid = false
+            }
+
+            if (password.isBlank()) {
+                binding.etPassword.error = "Password is required"
+                isValid = false
+            } else if (password.length < 6) {
+                binding.etPassword.error = "Password must be at least 6 characters"
+                isValid = false
+            }
+
+            if (confirm.isBlank()) {
+                binding.etConfirmPassword.error = "Confirm your password"
+                isValid = false
+            } else if (confirm != password) {
+                binding.etConfirmPassword.error = "Passwords do not match"
+                isValid = false
+            }
+
+            if (isValid) {
+                viewModel.register(displayName, email, password, confirm)
+            }
         }
 
         binding.btnGoToLogin.setOnClickListener {

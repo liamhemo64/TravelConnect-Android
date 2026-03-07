@@ -44,10 +44,23 @@ class LoginFragment : Fragment() {
             val email = binding.etEmail.text?.toString()?.trim() ?: ""
             val password = binding.etPassword.text?.toString()?.trim() ?: ""
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+            var isValid = true
+
+            if (email.isEmpty()) {
+                binding.etEmail.error = "Email is required"
+                isValid = false
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.etEmail.error = "Valid email is required"
+                isValid = false
+            }
+
+            if (password.isEmpty()) {
+                binding.etPassword.error = "Password is required"
+                isValid = false
+            }
+
+            if (isValid) {
                 viewModel.login(email, password)
-            } else {
-                Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
         }
 
