@@ -34,5 +34,11 @@
     <fragment 
         android:id="@+id/registerFragment"
         android:name="com.idz.travelconnect.features.auth.RegisterFragment"
-        android:label="Register"/>
+        android:label="Register">
+        <action
+            android:id="@+id/action_registerFragment_to_feedFragment"
+            app:destination="@id/feedFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

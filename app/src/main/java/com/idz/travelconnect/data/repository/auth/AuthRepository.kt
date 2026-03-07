@@ -23,6 +23,32 @@ class AuthRepository private constructor() {
             }
     }
 
+    fun register(
+        email: String,
+        password: String,
+        displayName: String,
+        onSuccess: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+            .addOnSuccessListener { authResult ->
+                val user = authResult.user
+                if (user != null && displayName.isNotBlank()) {
+                    val profileUpdates = com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                        .setDisplayName(displayName)
+                        .build()
+                    user.updateProfile(profileUpdates).addOnCompleteListener {
+                        onSuccess(user.uid)
+                    }
+                } else {
+                    onSuccess(user?.uid ?: "")
+                }
+            }
+            .addOnFailureListener { exception ->
+                onError(exception.message ?: "Registration failed.")
+            }
+    }
+
     companion object {
         val shared: AuthRepository by lazy { AuthRepository() }
     }
