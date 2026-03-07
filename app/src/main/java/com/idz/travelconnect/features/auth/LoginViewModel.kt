@@ -39,4 +39,8 @@ class LoginViewModel : ViewModel() {
             }
         )
     }
+
+    fun clearLoginSuccessData() {
+        _loginSuccessData.value = null
+    }
 }

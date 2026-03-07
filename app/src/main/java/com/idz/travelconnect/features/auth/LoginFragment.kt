@@ -14,8 +14,7 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    
-    // ViewModels init
+
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
@@ -28,13 +27,12 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        // Auto-login (remember me) on app launch logic
+
         val currentUser = com.idz.travelconnect.data.repository.auth.AuthRepository.shared.currentUser
-        if (currentUser != null && currentUser.email != null) {
+        if (currentUser?.email != null) {
             val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment(currentUser.email!!)
             findNavController().navigate(action)
-            return // Skip further setup for login
+            return
         }
 
         setupListeners()
@@ -43,9 +41,14 @@ class LoginFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text?.toString() ?: ""
-            val password = binding.etPassword.text?.toString() ?: ""
-            viewModel.login(email, password)
+            val email = binding.etEmail.text?.toString()?.trim() ?: ""
+            val password = binding.etPassword.text?.toString()?.trim() ?: ""
+
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                viewModel.login(email, password)
+            } else {
+                Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnGoToRegister.setOnClickListener {
@@ -58,19 +61,23 @@ class LoginFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
             binding.btnLogin.isEnabled = !loading
+            binding.btnGoToRegister.isEnabled = !loading
             binding.etEmail.isEnabled = !loading
             binding.etPassword.isEnabled = !loading
         }
 
         viewModel.error.observe(viewLifecycleOwner) { msg ->
-            msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show() }
+            msg?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
         }
 
         viewModel.loginSuccessData.observe(viewLifecycleOwner) { authenticatedEmail ->
             authenticatedEmail?.let {
-                // Trigger navigation using SafeArgs upon success
                 val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment(it)
                 findNavController().navigate(action)
+
+                viewModel.clearLoginSuccessData()
             }
         }
     }
