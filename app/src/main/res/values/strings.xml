@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TravelConnect</string>
+    <string name="ai_assistant_title">AI Travel Assistant</string>
+    <string name="ai_assistant_subtitle">Get personalized travel advice</string>
+    <string name="ai_question_hint">e.g., \'Give me a 5-day itinerary for Tokyo\' or \'What are the best beaches in Bali?\'</string>
+    <string name="btn_get_response">Get AI Response</string>
+    <string name="label_your_request">Your Request</string>
+    <string name="label_ai_response">AI Response</string>
+    <string name="label_saved_responses">Your Saved Responses</string>
 </resources>

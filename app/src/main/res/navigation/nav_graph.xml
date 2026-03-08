@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/aiAssistantFragment">
+
+    <fragment
+        android:id="@+id/aiAssistantFragment"
+        android:name="com.idz.travelconnect.features.aiassistant.AiAssistantFragment"
+        android:label="AI Travel Assistant"
+        tools:layout="@layout/fragment_ai_assistant" />
+
+</navigation>
