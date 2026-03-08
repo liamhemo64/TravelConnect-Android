@@ -32,40 +32,40 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.btnRegister.setOnClickListener {
-            val displayName = binding.etDisplayName.text?.toString()?.trim() ?: ""
-            val email = binding.etEmail.text?.toString()?.trim() ?: ""
-            val password = binding.etPassword.text?.toString() ?: ""
-            val confirm = binding.etConfirmPassword.text?.toString() ?: ""
+        binding.registerBtnRegister.setOnClickListener {
+            val displayName = binding.registerEtDisplayName.text?.toString()?.trim() ?: ""
+            val email = binding.registerEtEmail.text?.toString()?.trim() ?: ""
+            val password = binding.registerEtPassword.text?.toString() ?: ""
+            val confirm = binding.registerEtConfirmPassword.text?.toString() ?: ""
 
             var isValid = true
 
             if (displayName.isBlank()) {
-                binding.etDisplayName.error = "Display Name is required"
+                binding.registerEtDisplayName.error = "Display Name is required"
                 isValid = false
             }
 
             if (email.isBlank()) {
-                binding.etEmail.error = "Email is required"
+                binding.registerEtEmail.error = "Email is required"
                 isValid = false
             } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.etEmail.error = "Valid email is required"
+                binding.registerEtEmail.error = "Valid email is required"
                 isValid = false
             }
 
             if (password.isBlank()) {
-                binding.etPassword.error = "Password is required"
+                binding.registerEtPassword.error = "Password is required"
                 isValid = false
             } else if (password.length < 6) {
-                binding.etPassword.error = "Password must be at least 6 characters"
+                binding.registerEtPassword.error = "Password must be at least 6 characters"
                 isValid = false
             }
 
             if (confirm.isBlank()) {
-                binding.etConfirmPassword.error = "Confirm your password"
+                binding.registerEtConfirmPassword.error = "Confirm your password"
                 isValid = false
             } else if (confirm != password) {
-                binding.etConfirmPassword.error = "Passwords do not match"
+                binding.registerEtConfirmPassword.error = "Passwords do not match"
                 isValid = false
             }
 
@@ -74,16 +74,16 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        binding.btnGoToLogin.setOnClickListener {
+        binding.registerBtnGoToLogin.setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
     private fun setupObservers() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.btnRegister.isEnabled = !isLoading
-            binding.btnGoToLogin.isEnabled = !isLoading
+            binding.registerProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.registerBtnRegister.isEnabled = !isLoading
+            binding.registerBtnGoToLogin.isEnabled = !isLoading
         }
 
         viewModel.error.observe(viewLifecycleOwner) { errorMsg ->
