@@ -2,6 +2,7 @@ package com.idz.travelconnect.data.repository.auth
 
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.base.ErrorCompletion
+import com.google.firebase.auth.FirebaseUser
 import com.idz.travelconnect.data.model.auth.FirebaseAuthModel
 
 class AuthRepository private constructor() {
