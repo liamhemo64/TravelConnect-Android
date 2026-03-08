@@ -26,7 +26,7 @@ class LoginViewModel : ViewModel() {
         
         _isLoading.value = true
         // Entirely asynchronous callback handling wrapper
-        authRepository.login(
+        authRepository.signIn(
             email = email.trim(),
             password = password,
             onSuccess = {

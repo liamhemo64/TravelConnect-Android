@@ -1,52 +1,34 @@
 package com.idz.travelconnect.data.repository.auth
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.idz.travelconnect.base.Completion
+import com.idz.travelconnect.base.ErrorCompletion
+import com.idz.travelconnect.data.model.auth.FirebaseAuthModel
 
 class AuthRepository private constructor() {
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseAuthModel = FirebaseAuthModel()
 
     val currentUser: FirebaseUser?
-        get() = firebaseAuth.currentUser
+        get() = firebaseAuthModel.currentUser
 
-    fun login(
+    fun signIn(
         email: String,
         password: String,
-        onSuccess: () -> Unit,
-        onError: (String) -> Unit
+        onSuccess: Completion,
+        onError: ErrorCompletion
     ) {
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { exception ->
-                onError(exception.message ?: "Login failed.")
-            }
+        firebaseAuthModel.signIn(email, password, onSuccess, onError)
     }
 
-    fun register(
+    fun signUp(
         email: String,
         password: String,
         displayName: String,
+        profileImage: String?,
         onSuccess: (String) -> Unit,
-        onError: (String) -> Unit
+        onError: ErrorCompletion
     ) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener { authResult ->
-                val user = authResult.user
-                if (user != null && displayName.isNotBlank()) {
-                    val profileUpdates = com.google.firebase.auth.UserProfileChangeRequest.Builder()
-                        .setDisplayName(displayName)
-                        .build()
-                    user.updateProfile(profileUpdates).addOnCompleteListener {
-                        onSuccess(user.uid)
-                    }
-                } else {
-                    onSuccess(user?.uid ?: "")
-                }
-            }
-            .addOnFailureListener { exception ->
-                onError(exception.message ?: "Registration failed.")
-            }
+        firebaseAuthModel.signUp(email, password, displayName, profileImage, onSuccess, onError)
     }
 
     companion object {

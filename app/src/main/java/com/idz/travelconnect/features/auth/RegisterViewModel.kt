@@ -18,7 +18,7 @@ class RegisterViewModel : ViewModel() {
     private val _registerSuccessData = MutableLiveData<String?>()
     val registerSuccessData: LiveData<String?> = _registerSuccessData
 
-    fun register(displayName: String, email: String, password: String, confirmPassword: String) {
+    fun register(displayName: String, email: String, password: String, confirmPassword: String, profileImage: String? = null) {
         if (displayName.isBlank() || email.isBlank() || password.isBlank()) {
             _error.value = "Please fill in all fields."
             return
@@ -33,10 +33,11 @@ class RegisterViewModel : ViewModel() {
         }
 
         _isLoading.value = true
-        authRepository.register(
+        authRepository.signUp(
             email = email.trim(),
             password = password,
             displayName = displayName.trim(),
+            profileImage = profileImage,
             onSuccess = { _ ->
                 _isLoading.value = false
                 _registerSuccessData.value = email.trim()
