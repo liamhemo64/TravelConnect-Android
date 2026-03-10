@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Root is 84dp tall: 60dp bar + 24dp above for the floating AI FAB.
+    android:clipChildren="false" allows the FAB to draw above the bar bounds.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="84dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- White bar background with elevation shadow, occupies bottom 60dp -->
+    <View
+        android:id="@+id/nav_bar_background"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Home: active state, constrained to bar area -->
+    <LinearLayout
+        android:id="@+id/nav_home"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:elevation="9dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/nav_ai"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/icon_home"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_home"
+            app:tint="@color/nav_active" />
+
+        <TextView
+            android:id="@+id/label_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Home"
+            android:textColor="@color/nav_active"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!--
+        AI Assistant: full 84dp height so the 46dp FAB occupies the top
+        and its bottom portion + label sit inside the 60dp bar.
+        elevation=9dp ensures it draws above nav_bar_background.
+    -->
+    <LinearLayout
+        android:id="@+id/nav_ai"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:elevation="9dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/nav_post"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/nav_home"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_ai"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/gradient_ai_fab"
+            android:contentDescription="AI Assistant"
+            android:elevation="12dp"
+            android:src="@drawable/ic_sparkle"
+            android:scaleType="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="AI Assistant"
+            android:textColor="@color/nav_active"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Post: inactive state, constrained to bar area -->
+    <LinearLayout
+        android:id="@+id/nav_post"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:elevation="9dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/nav_profile"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/nav_ai">
+
+        <ImageView
+            android:id="@+id/icon_post"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_post"
+            app:tint="@color/nav_inactive" />
+
+        <TextView
+            android:id="@+id/label_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Post"
+            android:textColor="@color/nav_inactive"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Profile: inactive state, constrained to bar area -->
+    <LinearLayout
+        android:id="@+id/nav_profile"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:elevation="9dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/nav_post">
+
+        <ImageView
+            android:id="@+id/icon_profile"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_profile"
+            app:tint="@color/nav_inactive" />
+
+        <TextView
+            android:id="@+id/label_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Profile"
+            android:textColor="@color/nav_inactive"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
