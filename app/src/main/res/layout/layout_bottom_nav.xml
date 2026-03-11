@@ -61,18 +61,21 @@
         and its bottom portion + label sit inside the 60dp bar.
         elevation=9dp ensures it draws above nav_bar_background.
     -->
+
+    <!-- Post: inactive state, constrained to bar area -->
     <LinearLayout
         android:id="@+id/nav_ai"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
         android:elevation="9dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/nav_post"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/nav_home"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageButton
             android:id="@+id/btn_ai"
@@ -81,8 +84,8 @@
             android:background="@drawable/gradient_ai_fab"
             android:contentDescription="AI Assistant"
             android:elevation="12dp"
-            android:src="@drawable/ic_sparkle"
-            android:scaleType="center" />
+            android:scaleType="center"
+            android:src="@drawable/ic_sparkle" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,7 +96,6 @@
             android:textSize="10sp" />
     </LinearLayout>
 
-    <!-- Post: inactive state, constrained to bar area -->
     <LinearLayout
         android:id="@+id/nav_post"
         android:layout_width="0dp"
