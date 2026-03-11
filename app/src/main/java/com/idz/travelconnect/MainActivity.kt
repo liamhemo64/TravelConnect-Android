@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavClicks() {
         bottomNav.navHome.setOnClickListener { navigateTo(R.id.feedFragment) }
-        bottomNav.btnAi.setOnClickListener { navigateTo(R.id.aiAssistantFragment) }
+        bottomNav.navAi.setOnClickListener { navigateTo(R.id.aiAssistantFragment) }
         bottomNav.navPost.setOnClickListener { navigateTo(R.id.postFragment) }
         bottomNav.navProfile.setOnClickListener { navigateTo(R.id.profileFragment) }
     }
