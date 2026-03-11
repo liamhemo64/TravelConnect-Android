@@ -67,6 +67,7 @@
         android:id="@+id/nav_ai"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
         android:elevation="9dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
