@@ -59,7 +59,7 @@ class AiAssistantFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner) { msg ->
             msg?.let {
                 Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG).show()
-                viewModel.error.value = null
+                viewModel.clearError()
             }
         }
 
