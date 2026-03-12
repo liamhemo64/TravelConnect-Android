@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="nav_active">#007ACC</color>
+    <color name="nav_inactive">#9E9E9E</color>
     <color name="primaryBlue">#1565C0</color>
     <color name="primaryDark">#0D47A1</color>
     <color name="accentTeal">#00ACC1</color>
