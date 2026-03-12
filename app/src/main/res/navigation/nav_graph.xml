@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/aiAssistantFragment"
-        android:name="com.idz.travelconnect.features.ai.AiAssistantFragment"
+        android:name="com.idz.travelconnect.features.aiassistant.AiAssistantFragment"
         android:label="AI Assistant" />
 
     <fragment
