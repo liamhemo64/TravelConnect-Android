@@ -1,14 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/apk/res/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/aiAssistantFragment">
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.idz.travelconnect.features.auth.LoginFragment"
+        android:label="Login">
+
+        <action
+            android:id="@+id/action_loginFragment_to_feedFragment"
+            app:destination="@id/feedFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.idz.travelconnect.features.feed.FeedFragment"
+        android:label="Home">
+        <argument
+            android:name="userEmail"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.idz.travelconnect.features.auth.RegisterFragment"
+        android:label="Register">
+        <action
+            android:id="@+id/action_registerFragment_to_feedFragment"
+            app:destination="@id/feedFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/aiAssistantFragment"
-        android:name="com.idz.travelconnect.features.aiassistant.AiAssistantFragment"
-        android:label="AI Travel Assistant"
-        tools:layout="@layout/fragment_ai_assistant" />
+        android:name="com.idz.travelconnect.features.ai.AiAssistantFragment"
+        android:label="AI Assistant" />
+
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.idz.travelconnect.features.post.PostFragment"
+        android:label="Post" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.idz.travelconnect.features.profile.ProfileFragment"
+        android:label="Profile" />
 
 </navigation>
