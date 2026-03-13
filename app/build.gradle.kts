@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.idz.travelconnect"
-        minSdk = 31
+        minSdk = 33
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
     
     // Firebase
     implementation(platform(libs.firebase.bom))
