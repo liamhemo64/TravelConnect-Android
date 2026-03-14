@@ -84,15 +84,13 @@ class PostRepository private constructor() {
         post: Post,
         completion: Completion
     ) {
-        fun saveUpdated(imageUrl: String?) {
-            val updated = post.copy(imageUrl = imageUrl ?: post.imageUrl)
+            val updated = post.copy(imageUrl = post.imageUrl)
             firebaseModel.savePost(updated) {
                 executor.execute {
                     database.postDao.insertPosts(updated)
                     mainHandler.post { completion() }
                 }
             }
-        }
     }
 
     fun deletePost(postId: String, completion: Completion) {
