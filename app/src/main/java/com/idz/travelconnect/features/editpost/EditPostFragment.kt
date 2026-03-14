@@ -1,10 +1,14 @@
 package com.idz.travelconnect.features.editpost
 
 import android.app.DatePickerDialog
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.idz.travelconnect.databinding.FragmentEditPostBinding
 import com.idz.travelconnect.model.Post
+import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,8 +25,16 @@ class EditPostFragment : Fragment() {
     private var binding: FragmentEditPostBinding? = null
     private val viewModel: EditPostViewModel by viewModels()
     private val args: EditPostFragmentArgs by navArgs()
+
+    private var selectedImageBitmap: Bitmap? = null
     private var originalPost: Post? = null
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { loadImageFromUri(it) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +53,10 @@ class EditPostFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        binding?.btnPickImage?.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
+
         binding?.etStartDate?.setOnClickListener { showDatePicker { date ->
             binding?.etStartDate?.setText(date)
         }}
@@ -63,7 +80,7 @@ class EditPostFragment : Fragment() {
                 startDate = binding?.etStartDate?.text?.toString() ?: "",
                 endDate = binding?.etEndDate?.text?.toString() ?: "",
                 description = binding?.etDescription?.text?.toString() ?: "",
-                newImageBitmap = null
+                newImageBitmap = selectedImageBitmap
             )
         }
     }
@@ -82,6 +99,19 @@ class EditPostFragment : Fragment() {
         ).show()
     }
 
+    private fun loadImageFromUri(uri: Uri) {
+        try {
+            val source = ImageDecoder.createSource(requireContext().contentResolver, uri)
+            val bitmap = ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                decoder.isMutableRequired = true
+            }
+            selectedImageBitmap = bitmap
+            binding?.ivImagePreview?.setImageBitmap(bitmap)
+            binding?.ivImagePreview?.visibility = View.VISIBLE
+        } catch (e: Exception) {
+            Snackbar.make(requireView(), "Failed to load image", Snackbar.LENGTH_SHORT).show()
+        }
+    }
 
     private fun setupObservers() {
         viewModel.post.observe(viewLifecycleOwner) { post ->
@@ -92,6 +122,15 @@ class EditPostFragment : Fragment() {
                 binding?.etStartDate?.setText(post.startDate)
                 binding?.etEndDate?.setText(post.endDate)
                 binding?.etDescription?.setText(post.description)
+
+                if (!post.imageUrl.isNullOrBlank()) {
+                    binding?.ivImagePreview?.visibility = View.VISIBLE
+                    Picasso.get()
+                        .load(post.imageUrl)
+                        .fit()
+                        .centerCrop()
+                        .into(binding?.ivImagePreview)
+                }
             }
         }
 

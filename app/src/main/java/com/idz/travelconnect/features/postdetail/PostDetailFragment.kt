@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.idz.travelconnect.R
 import com.idz.travelconnect.databinding.FragmentPostDetailsBinding
+import com.squareup.picasso.Picasso
 
 class PostDetailFragment : Fragment() {
 
@@ -67,6 +68,23 @@ class PostDetailFragment : Fragment() {
             binding?.tvDescription?.text = post.description
 
             val b = binding ?: return@observe
+
+            if (!post.imageUrl.isNullOrBlank()) {
+                b.ivPostImage.visibility = View.VISIBLE
+                Picasso.get()
+                    .load(post.imageUrl)
+                    .fit()
+                    .centerCrop()
+                    .into(b.ivPostImage)
+            }
+
+            if (!post.userAvatarUrl.isNullOrBlank()) {
+                Picasso.get()
+                    .load(post.userAvatarUrl)
+                    .fit()
+                    .centerCrop()
+                    .into(b.ivUserAvatar)
+            }
 
             if (viewModel.isOwner(post)) {
                 b.btnEdit.visibility = View.VISIBLE

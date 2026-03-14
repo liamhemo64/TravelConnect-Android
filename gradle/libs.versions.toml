@@ -16,6 +16,7 @@ firebaseBom = "34.10.0"
 room = "2.8.4"
 swiperefreshlayout = "1.2.0"
 cloudinaryAndroid = "3.1.2"
+picasso = "2.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,7 @@ cloudinary-android = { module = "com.cloudinary:cloudinary-android", version.ref
 cloudinary-android-preprocess = { module = "com.cloudinary:cloudinary-android-preprocess", version.ref = "cloudinaryAndroid" }
 cloudinary-android-download = { module = "com.cloudinary:cloudinary-android-download", version.ref = "cloudinaryAndroid" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

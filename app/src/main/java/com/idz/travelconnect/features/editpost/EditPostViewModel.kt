@@ -46,7 +46,7 @@ class EditPostViewModel : ViewModel() {
             description = description.trim()
         )
 
-        postRepository.updatePost(updated) {
+        postRepository.updatePost(updated, newImageBitmap) {
             isLoading.value = false
             postUpdated.value = true
         }

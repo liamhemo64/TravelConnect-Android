@@ -59,7 +59,8 @@ dependencies {
     implementation(libs.cloudinary.android)
     implementation(libs.cloudinary.android.download)
     implementation(libs.cloudinary.android.preprocess)
-    
+    implementation(libs.picasso)
+
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
