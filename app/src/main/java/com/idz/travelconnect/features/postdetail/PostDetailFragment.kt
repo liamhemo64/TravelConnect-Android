@@ -35,6 +35,10 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        binding?.btnBack?.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding?.btnEdit?.setOnClickListener {
             val action = PostDetailFragmentDirections
                 .actionPostDetailFragmentToEditPostFragment(args.postId)

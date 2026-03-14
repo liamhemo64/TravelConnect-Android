@@ -14,7 +14,6 @@ class PostViewHolder(
         binding.tvUserName.text = post.userName
         binding.tvDestination.text = post.destination
         binding.tvDates.text = "${post.startDate} – ${post.endDate}"
-        binding.tvDescription.text = post.description
         binding.chipCountry.text = post.country
 
         binding.root.setOnClickListener { onPostClick(post) }
