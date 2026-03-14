@@ -26,7 +26,6 @@ class PostDetailViewModel : ViewModel() {
     fun init(postId: String) {
         _postId = postId
         post = postRepository.getPostById(postId)
-
     }
 
     fun deletePost(completion: Completion) {

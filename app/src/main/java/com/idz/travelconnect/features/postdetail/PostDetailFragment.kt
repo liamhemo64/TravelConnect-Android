@@ -34,9 +34,7 @@ class PostDetailFragment : Fragment() {
         setupListeners()
     }
 
-
     private fun setupListeners() {
-
         binding?.btnEdit?.setOnClickListener {
             val action = PostDetailFragmentDirections
                 .actionPostDetailFragmentToEditPostFragment(args.postId)
