@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.dao.AppLocalDB
 import com.idz.travelconnect.data.model.FirebaseModel
+import com.idz.travelconnect.data.model.StorageModel
 import com.idz.travelconnect.model.Post
 import java.util.UUID
 import java.util.concurrent.Executors
@@ -14,6 +15,8 @@ import java.util.concurrent.Executors
 class PostRepository private constructor() {
 
     private val firebaseModel = FirebaseModel()
+
+    private val storageModel = StorageModel()
     private val database = AppLocalDB.db
     private val executor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler.createAsync(Looper.getMainLooper())
@@ -78,19 +81,40 @@ class PostRepository private constructor() {
                 }
             }
         }
+
+        if (imageBitmap != null) {
+            storageModel.uploadImage(
+                folderPath = "posts/$postId",
+                image = imageBitmap
+            ) { url -> savePost(url) }
+        } else {
+            savePost(null)
+        }
     }
 
     fun updatePost(
         post: Post,
+        newImageBitmap: Bitmap?,
         completion: Completion
     ) {
-            val updated = post.copy(imageUrl = post.imageUrl)
+        fun saveUpdated(imageUrl: String?) {
+            val updated = post.copy(imageUrl = imageUrl ?: post.imageUrl)
             firebaseModel.savePost(updated) {
                 executor.execute {
                     database.postDao.insertPosts(updated)
                     mainHandler.post { completion() }
                 }
             }
+        }
+
+        if (newImageBitmap != null) {
+            storageModel.uploadImage(
+                folderPath = "posts/${post.id}",
+                image = newImageBitmap
+            ) { url -> saveUpdated(url) }
+        } else {
+            saveUpdated(null)
+        }
     }
 
     fun deletePost(postId: String, completion: Completion) {
