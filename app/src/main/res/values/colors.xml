@@ -4,4 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="nav_active">#007ACC</color>
     <color name="nav_inactive">#9E9E9E</color>
+
+    <!-- Post screen -->
+    <color name="post_primary_blue">#0073B1</color>
+    <color name="post_input_bg">#F4F5F7</color>
+    <color name="post_text_primary">#1C2B33</color>
+    <color name="post_divider">#E8EAED</color>
 </resources>
