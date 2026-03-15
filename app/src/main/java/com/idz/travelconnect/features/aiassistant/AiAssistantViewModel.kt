@@ -1,42 +1,39 @@
 package com.idz.travelconnect.features.aiassistant
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
 import com.idz.travelconnect.BuildConfig
-import com.idz.travelconnect.database.AppDatabase
+import com.idz.travelconnect.base.GEMINI_MODEL_NAME
+import com.idz.travelconnect.dao.AppLocalDB
 import com.idz.travelconnect.model.AiResponse
 import kotlinx.coroutines.launch
 
-class AiAssistantViewModel(application: Application) : AndroidViewModel(application) {
+class AiAssistantViewModel : ViewModel() {
 
-    private val dao = AppDatabase.getInstance(application).aiResponseDao()
+    private val dao = AppLocalDB.db.aiResponseDao
 
     val responses: LiveData<List<AiResponse>> = dao.getAllResponses()
 
-    private val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> get() = _isLoading
-
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> get() = _error
+    val isLoading = MutableLiveData(false)
+    val error = MutableLiveData<String?>()
 
     private val generativeModel = GenerativeModel(
-        modelName = "gemini-2.5-flash",
+        modelName = GEMINI_MODEL_NAME,
         apiKey = BuildConfig.GEMINI_API_KEY
     )
 
     fun clearError() {
-        _error.value = null
+        error.value = null
     }
 
     fun getAiResponse(userQuery: String) {
         if (userQuery.isBlank()) return
 
-        _isLoading.value = true
-        _error.value = null
+        isLoading.value = true
+        error.value = null
 
         viewModelScope.launch {
             try {
@@ -51,9 +48,9 @@ class AiAssistantViewModel(application: Application) : AndroidViewModel(applicat
                     )
                 )
             } catch (e: Exception) {
-                _error.value = "Failed to get AI response: ${e.message}"
+                error.value = "Failed to get AI response: ${e.message}"
             } finally {
-                _isLoading.value = false
+                isLoading.value = false
             }
         }
     }
