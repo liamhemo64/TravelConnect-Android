@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.idz.travelconnect"
-        minSdk = 31
+        minSdk = 33
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -79,7 +79,18 @@ dependencies {
     // Gemini AI
     implementation(libs.generativeai)
 
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.cloudinary.android)
+    implementation(libs.cloudinary.android.download)
+    implementation(libs.cloudinary.android.preprocess)
+    implementation(libs.picasso)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
