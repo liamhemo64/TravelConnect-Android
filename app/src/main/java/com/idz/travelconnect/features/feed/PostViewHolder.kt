@@ -13,7 +13,7 @@ class PostViewHolder(
     RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.tvUserName.text = post.userName
-        binding.tvDestination.text = "${post.destination}, ${post.country}"
+        binding.tvPostLocation.text = "${post.destination}, ${post.country}"
         binding.tvDates.text = "${post.startDate} - ${post.endDate}"
         binding.tvCommentCount.text = "0 comments"
 
