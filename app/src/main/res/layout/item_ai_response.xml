@@ -55,7 +55,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@android:drawable/star_on"
-                android:tint="@color/aiResponseLabel"
+                android:tint="@color/colorPrimary"
                 android:layout_marginEnd="4dp"
                 android:contentDescription="AI icon" />
 
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_ai_response"
-                android:textColor="@color/aiResponseLabel"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
         </LinearLayout>

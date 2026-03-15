@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundGray"
+    android:background="@color/colorBackground"
     tools:context=".features.aiassistant.AiAssistantFragment">
 
     <LinearLayout
@@ -16,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primaryBlue"
+            android:background="@color/colorPrimary"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="20dp"
@@ -101,7 +101,7 @@
                     android:text="@string/btn_get_response"
                     android:textColor="@color/white"
                     android:textSize="15sp"
-                    app:backgroundTint="@color/primaryBlue"
+                    app:backgroundTint="@color/colorPrimary"
                     app:cornerRadius="8dp"
                     app:icon="@android:drawable/ic_menu_send"
                     app:iconGravity="textStart"
