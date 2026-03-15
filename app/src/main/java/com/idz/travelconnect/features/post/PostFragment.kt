@@ -51,9 +51,12 @@ class PostFragment : Fragment() {
         }
 
         binding.btnShare.setOnClickListener {
-            val location = binding.etLocation.text.toString()
-            val caption = binding.etCaption.text.toString()
-            viewModel.createPost(location, caption)
+            val destination = binding.etDestination.text.toString()
+            val country = binding.etCountry.text.toString()
+            val startDate = binding.etStartDate.text.toString()
+            val endDate = binding.etEndDate.text.toString()
+            val description = binding.etDescription.text.toString()
+            viewModel.createPost(destination, country, startDate, endDate, description)
         }
     }
 
@@ -72,8 +75,11 @@ class PostFragment : Fragment() {
         viewModel.postSuccessData.observe(viewLifecycleOwner) { postId ->
             postId?.let {
                 Toast.makeText(requireContext(), "Post shared!", Toast.LENGTH_SHORT).show()
-                binding.etLocation.text?.clear()
-                binding.etCaption.text?.clear()
+                binding.etDestination.text?.clear()
+                binding.etCountry.text?.clear()
+                binding.etStartDate.text?.clear()
+                binding.etEndDate.text?.clear()
+                binding.etDescription.text?.clear()
                 binding.ivSelectedImage.visibility = View.GONE
                 binding.photoPlaceholder.visibility = View.VISIBLE
                 viewModel.clearPostSuccessData()

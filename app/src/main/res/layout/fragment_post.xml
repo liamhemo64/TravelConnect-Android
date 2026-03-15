@@ -122,7 +122,7 @@
 
             </FrameLayout>
 
-            <!-- ─── Location Field ─── -->
+            <!-- ─── Destination Field ─── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,16 +136,16 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginEnd="10dp"
-                    android:contentDescription="Location"
+                    android:contentDescription="Destination"
                     android:src="@drawable/ic_location_pin" />
 
                 <EditText
-                    android:id="@+id/etLocation"
+                    android:id="@+id/etDestination"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="Add location"
+                    android:hint="Destination"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -155,15 +155,72 @@
 
             </LinearLayout>
 
-            <!-- ─── Caption Field ─── -->
+            <!-- ─── Country Field ─── -->
             <EditText
-                android:id="@+id/etCaption"
+                android:id="@+id/etCountry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="Country"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="14dp"
+                android:textColor="@color/post_text_primary"
+                android:textColorHint="@color/nav_inactive"
+                android:textSize="15sp" />
+
+            <!-- ─── Dates Row ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etStartDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="Start date"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="14dp"
+                    android:textColor="@color/post_text_primary"
+                    android:textColorHint="@color/nav_inactive"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etEndDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="End date"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="14dp"
+                    android:textColor="@color/post_text_primary"
+                    android:textColorHint="@color/nav_inactive"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <!-- ─── Description Field ─── -->
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/bg_input_field"
                 android:gravity="top|start"
-                android:hint="Write a caption..."
+                android:hint="Write a description..."
                 android:inputType="textMultiLine"
                 android:minHeight="140dp"
                 android:padding="14dp"
