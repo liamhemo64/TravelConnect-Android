@@ -11,15 +11,15 @@ class PostViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
+        binding.tvDestination.text = "${post.destination}, ${post.country}"
+        binding.tvDates.text = "${post.startDate} - ${post.endDate}"
         binding.tvUserName.text = post.userName
-        binding.tvDestination.text = post.destination
-        binding.tvDates.text = "${post.startDate} – ${post.endDate}"
-        binding.chipCountry.text = post.country
+        binding.tvCommentCount.text = "0 comments" // Placeholder for now
 
         if (!post.imageUrl.isNullOrBlank()) {
-            binding.ivPostImage.visibility = android.view.View.VISIBLE
             Picasso.get()
                 .load(post.imageUrl)
+                .placeholder(android.R.drawable.ic_menu_gallery)
                 .fit()
                 .centerCrop()
                 .into(binding.ivPostImage)
