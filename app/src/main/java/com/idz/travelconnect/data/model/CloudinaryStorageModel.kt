@@ -9,19 +9,15 @@ import com.cloudinary.android.policy.GlobalUploadPolicy
 import com.cloudinary.android.policy.UploadPolicy
 import com.idz.travelconnect.TravelConnectApplication
 import com.idz.travelconnect.base.StringCompletion
+import com.idz.travelconnect.base.cloudinaryConfig
 import java.io.File
 
 class CloudinaryStorageModel {
 
     init {
         try {
-            val config = mapOf(
-                "cloud_name" to "duutna6lt",
-                "api_key" to "646421153716863",
-                "api_secret" to "zbfAoiCiwRSW0_Hj39GzHerfnbU"
-            )
             TravelConnectApplication.appContext?.let {
-                MediaManager.init(it, config)
+                MediaManager.init(it, cloudinaryConfig)
                 MediaManager.get().globalUploadPolicy = GlobalUploadPolicy.Builder()
                     .maxConcurrentRequests(3)
                     .networkPolicy(UploadPolicy.NetworkType.UNMETERED)
