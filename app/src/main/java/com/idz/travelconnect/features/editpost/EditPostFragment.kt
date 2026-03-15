@@ -53,6 +53,10 @@ class EditPostFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        binding?.btnCancel?.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding?.btnPickImage?.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
