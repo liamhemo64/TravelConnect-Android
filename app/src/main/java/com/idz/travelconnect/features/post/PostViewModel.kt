@@ -6,9 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.idz.travelconnect.data.model.post.Post
 import com.idz.travelconnect.data.repository.post.PostRepository
-import java.util.UUID
 
 class PostViewModel : ViewModel() {
 
@@ -29,45 +27,45 @@ class PostViewModel : ViewModel() {
         selectedBitmap = bitmap
     }
 
-    fun createPost(location: String, caption: String) {
-        val bitmap = selectedBitmap
-        if (bitmap == null) {
+    fun createPost(destination: String, country: String, startDate: String, endDate: String, description: String) {
+        if (selectedBitmap == null) {
             _error.value = "Please add a photo."
             return
         }
-        if (location.isBlank()) {
-            _error.value = "Please add a location."
+        if (destination.isBlank()) {
+            _error.value = "Please add a destination."
             return
         }
-        if (caption.isBlank()) {
-            _error.value = "Please write a caption."
+        if (country.isBlank()) {
+            _error.value = "Please add a country."
+            return
+        }
+        if (startDate.isBlank() || endDate.isBlank()) {
+            _error.value = "Please add travel dates."
+            return
+        }
+        if (description.isBlank()) {
+            _error.value = "Please write a description."
             return
         }
 
         _isLoading.value = true
 
         val currentUser = Firebase.auth.currentUser
-        val post = Post(
-            id = UUID.randomUUID().toString(),
-            authorId = currentUser?.uid ?: "",
-            location = location.trim(),
-            caption = caption.trim(),
-            imageUrl = null,
-            lastUpdated = System.currentTimeMillis()
-        )
-
-        postRepository.addPost(
-            image = bitmap,
-            post = post,
-            onSuccess = {
-                _isLoading.value = false
-                _postSuccessData.value = post.id
-            },
-            onError = { msg ->
-                _isLoading.value = false
-                _error.value = msg
-            }
-        )
+        postRepository.createPost(
+            userId = currentUser?.uid ?: "",
+            userName = currentUser?.displayName ?: "",
+            userAvatarUrl = currentUser?.photoUrl?.toString(),
+            destination = destination.trim(),
+            country = country.trim(),
+            startDate = startDate.trim(),
+            endDate = endDate.trim(),
+            description = description.trim(),
+            imageBitmap = selectedBitmap
+        ) {
+            _isLoading.value = false
+            _postSuccessData.value = "done"
+        }
     }
 
     fun clearPostSuccessData() {
