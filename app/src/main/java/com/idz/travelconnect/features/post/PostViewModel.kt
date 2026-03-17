@@ -61,11 +61,16 @@ class PostViewModel : ViewModel() {
             startDate = startDate.trim(),
             endDate = endDate.trim(),
             description = description.trim(),
-            imageBitmap = selectedBitmap
-        ) {
-            _isLoading.value = false
-            _postSuccessData.value = "done"
-        }
+            imageBitmap = selectedBitmap,
+            completion = {
+                _isLoading.value = false
+                _postSuccessData.value = "done"
+            },
+            onError = { errorMsg ->
+                _isLoading.value = false
+                _error.value = errorMsg
+            }
+        )
     }
 
     fun clearPostSuccessData() {
