@@ -9,19 +9,18 @@ import com.idz.travelconnect.databinding.FragmentPostBinding
 
 class PostFragment : Fragment() {
 
-    private var _binding: FragmentPostBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentPostBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPostBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        binding = FragmentPostBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }
