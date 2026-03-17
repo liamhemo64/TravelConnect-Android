@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import com.idz.travelconnect.base.Completion
+import com.idz.travelconnect.base.ErrorCompletion
 import com.idz.travelconnect.dao.AppLocalDB
 import com.idz.travelconnect.data.model.FirebaseModel
 import com.idz.travelconnect.data.model.StorageModel
@@ -56,7 +57,8 @@ class PostRepository private constructor() {
         endDate: String,
         description: String,
         imageBitmap: Bitmap?,
-        completion: Completion
+        completion: Completion,
+        onError: ErrorCompletion = {}
     ) {
         val postId = UUID.randomUUID().toString()
 
@@ -84,9 +86,16 @@ class PostRepository private constructor() {
 
         if (imageBitmap != null) {
             storageModel.uploadImage(
+                api = StorageModel.StorageAPI.CLOUDINARY,
                 folderPath = "posts/$postId",
                 image = imageBitmap
-            ) { url -> savePost(url) }
+            ) { url ->
+                if (url != null) {
+                    savePost(url)
+                } else {
+                    mainHandler.post { onError("Failed to upload image. Check your connection.") }
+                }
+            }
         } else {
             savePost(null)
         }
@@ -109,6 +118,7 @@ class PostRepository private constructor() {
 
         if (newImageBitmap != null) {
             storageModel.uploadImage(
+                api = StorageModel.StorageAPI.CLOUDINARY,
                 folderPath = "posts/${post.id}",
                 image = newImageBitmap
             ) { url -> saveUpdated(url) }

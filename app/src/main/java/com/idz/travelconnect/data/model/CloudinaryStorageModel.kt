@@ -20,7 +20,7 @@ class CloudinaryStorageModel {
                 MediaManager.init(it, cloudinaryConfig)
                 MediaManager.get().globalUploadPolicy = GlobalUploadPolicy.Builder()
                     .maxConcurrentRequests(3)
-                    .networkPolicy(UploadPolicy.NetworkType.UNMETERED)
+                    .networkPolicy(UploadPolicy.NetworkType.ANY)
                     .build()
             }
         } catch (_: Exception) {

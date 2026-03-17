@@ -50,9 +50,7 @@ class PostDetailFragment : Fragment() {
             AlertDialog.Builder(requireContext())
                 .setMessage(getString(R.string.delete_post_confirm))
                 .setPositiveButton(getString(R.string.delete)) { _, _ ->
-                    viewModel.deletePost {
-                        findNavController().popBackStack()
-                    }
+                    viewModel.deletePost()
                 }
                 .setNegativeButton(getString(R.string.cancel), null)
                 .show()
