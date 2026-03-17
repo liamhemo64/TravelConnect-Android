@@ -40,12 +40,18 @@ class AiAssistantFragment : Fragment() {
 
     private fun setupListeners() {
         binding?.btnGetResponse?.setOnClickListener {
+            val country = binding?.etCountry?.text?.toString()?.trim() ?: ""
             val query = binding?.etQuestion?.text?.toString()?.trim() ?: ""
+            if (country.isBlank()) {
+                binding?.etCountry?.error = "Please enter a country"
+                return@setOnClickListener
+            }
             if (query.isBlank()) {
                 binding?.etQuestion?.error = "Please enter a question"
                 return@setOnClickListener
             }
-            viewModel.getAiResponse(query)
+            viewModel.getAiResponse(country, query)
+            binding?.etCountry?.setText("")
             binding?.etQuestion?.setText("")
         }
     }
@@ -66,8 +72,7 @@ class AiAssistantFragment : Fragment() {
         viewModel.responses.observe(viewLifecycleOwner) { responses ->
             adapter.submitList(responses)
             val count = responses.size
-            binding?.tvSavedResponsesHeader?.text =
-                "Your Saved Responses ($count)"
+            binding?.tvSavedResponsesHeader?.text = "Your Saved Responses ($count)"
             binding?.tvSavedResponsesHeader?.visibility =
                 if (count > 0) View.VISIBLE else View.GONE
         }

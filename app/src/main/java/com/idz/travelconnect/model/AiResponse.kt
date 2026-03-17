@@ -9,5 +9,9 @@ data class AiResponse(
     val id: Int = 0,
     val userQuery: String,
     val aiResponse: String,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val flagUrl: String = "",
+    val region: String = "",
+    val languages: String = "",
+    val currencies: String = ""
 )

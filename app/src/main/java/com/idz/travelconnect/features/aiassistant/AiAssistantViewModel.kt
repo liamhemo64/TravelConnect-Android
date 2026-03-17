@@ -9,6 +9,8 @@ import com.idz.travelconnect.BuildConfig
 import com.idz.travelconnect.base.GEMINI_MODEL_NAME
 import com.idz.travelconnect.dao.AppLocalDB
 import com.idz.travelconnect.model.AiResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class AiAssistantViewModel : ViewModel() {
@@ -29,22 +31,33 @@ class AiAssistantViewModel : ViewModel() {
         error.value = null
     }
 
-    fun getAiResponse(userQuery: String) {
-        if (userQuery.isBlank()) return
+    fun getAiResponse(country: String, userQuery: String) {
+        if (country.isBlank() || userQuery.isBlank()) return
 
         isLoading.value = true
         error.value = null
 
         viewModelScope.launch {
             try {
-                val prompt = "You are a helpful AI travel assistant. Answer this travel question concisely and helpfully: $userQuery"
-                val result = generativeModel.generateContent(prompt)
-                val responseText = result.text ?: "No response received."
+                val countryInfoDeferred = async(Dispatchers.IO) {
+                    try { RestCountriesRepository.fetchCountry(country) } catch (e: Exception) { null }
+                }
+                val aiDeferred = async {
+                    val prompt = "You are a helpful AI travel assistant. The user is asking about $country. Answer this travel question concisely and helpfully: $userQuery"
+                    generativeModel.generateContent(prompt).text ?: "No response received."
+                }
+
+                val countryInfo = countryInfoDeferred.await()
+                val responseText = aiDeferred.await()
 
                 dao.insertResponse(
                     AiResponse(
-                        userQuery = userQuery,
-                        aiResponse = responseText
+                        userQuery = "$country - $userQuery",
+                        aiResponse = responseText,
+                        flagUrl = countryInfo?.flagUrl ?: "",
+                        region = countryInfo?.region ?: "",
+                        languages = countryInfo?.languages ?: "",
+                        currencies = countryInfo?.currencies ?: ""
                     )
                 )
             } catch (e: Exception) {
