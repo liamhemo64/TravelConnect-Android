@@ -14,16 +14,15 @@ import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentProfileBinding? = null
     private val authModel = FirebaseAuthModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,6 +49,6 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }

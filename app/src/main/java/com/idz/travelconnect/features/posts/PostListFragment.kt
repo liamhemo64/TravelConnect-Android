@@ -14,9 +14,7 @@ import com.idz.travelconnect.features.feed.PostsAdapter
 
 class PostListFragment : Fragment() {
 
-    private var _binding: FragmentPostListBinding? = null
-    private val binding get() = _binding!!
-    
+    private var binding: FragmentPostListBinding? = null
     private val viewModel: PostListViewModel by viewModels()
     private lateinit var adapter: PostsAdapter
 
@@ -24,9 +22,9 @@ class PostListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPostListBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        binding = FragmentPostListBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,12 +43,12 @@ class PostListFragment : Fragment() {
                 }
             }
         )
-        binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvPosts.adapter = adapter
+        binding?.rvPosts?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.rvPosts?.adapter = adapter
     }
 
     private fun setupListeners() {
-        binding.swipeRefresh.setOnRefreshListener {
+        binding?.swipeRefresh?.setOnRefreshListener {
             viewModel.refresh()
         }
     }
@@ -58,17 +56,17 @@ class PostListFragment : Fragment() {
     private fun setupObservers() {
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts)
-            binding.tvEmpty.visibility = if (posts.isEmpty()) View.VISIBLE else View.GONE
-            binding.rvPosts.visibility = if (posts.isEmpty()) View.GONE else View.VISIBLE
+            binding?.tvEmpty?.visibility = if (posts.isEmpty()) View.VISIBLE else View.GONE
+            binding?.rvPosts?.visibility = if (posts.isEmpty()) View.GONE else View.VISIBLE
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
-            binding.swipeRefresh.isRefreshing = loading
+            binding?.swipeRefresh?.isRefreshing = loading
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }
