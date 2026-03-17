@@ -5,6 +5,7 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.dao.AppLocalDB
+import com.idz.travelconnect.dao.CommentDao
 import com.idz.travelconnect.data.model.FirebaseModel
 import com.idz.travelconnect.model.Comment
 import java.util.UUID
