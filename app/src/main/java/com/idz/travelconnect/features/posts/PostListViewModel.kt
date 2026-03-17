@@ -1,4 +1,4 @@
-package com.idz.travelconnect.features.feed
+package com.idz.travelconnect.features.posts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.idz.travelconnect.data.repository.post.PostRepository
 import com.idz.travelconnect.model.Post
 
-class FeedViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+class PostListViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val postRepository = PostRepository.shared
+    
+    // Safely get userId from arguments
     private val userId: String? = savedStateHandle.get<String>("userId")
 
     val posts: LiveData<List<Post>> = if (userId.isNullOrEmpty()) {
@@ -19,7 +21,6 @@ class FeedViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     }
 
     val isLoading = MutableLiveData(false)
-    val error = MutableLiveData<String?>()
 
     init {
         refresh()
