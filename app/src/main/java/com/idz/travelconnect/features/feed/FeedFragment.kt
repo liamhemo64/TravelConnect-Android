@@ -5,16 +5,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
+import com.idz.travelconnect.R
+import com.idz.travelconnect.databinding.FragmentFeedBinding
+import com.idz.travelconnect.features.posts.PostListFragment
 
 class FeedFragment : Fragment() {
 
-    private val args: FeedFragmentArgs by navArgs()
+    private var binding: FragmentFeedBinding? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(android.R.layout.simple_list_item_1, container, false)
+        binding = FragmentFeedBinding.inflate(inflater, container, false)
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        if (savedInstanceState == null) {
+            val postListFragment = PostListFragment()
+            childFragmentManager.beginTransaction()
+                .replace(R.id.postListContainer, postListFragment)
+                .commit()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

@@ -12,17 +12,15 @@ import com.idz.travelconnect.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
 
-    private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
-
+    private var binding: FragmentLoginBinding? = null
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,22 +38,22 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text?.toString()?.trim() ?: ""
-            val password = binding.etPassword.text?.toString()?.trim() ?: ""
+        binding?.btnLogin?.setOnClickListener {
+            val email = binding?.etEmail?.text?.toString()?.trim() ?: ""
+            val password = binding?.etPassword?.text?.toString()?.trim() ?: ""
 
             var isValid = true
 
             if (email.isEmpty()) {
-                binding.etEmail.error = "Email is required"
+                binding?.etEmail?.error = "Email is required"
                 isValid = false
             } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.etEmail.error = "Valid email is required"
+                binding?.etEmail?.error = "Valid email is required"
                 isValid = false
             }
 
             if (password.isEmpty()) {
-                binding.etPassword.error = "Password is required"
+                binding?.etPassword?.error = "Password is required"
                 isValid = false
             }
 
@@ -64,7 +62,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        binding.btnGoToRegister.setOnClickListener {
+        binding?.btnGoToRegister?.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
             findNavController().navigate(action)
         }
@@ -72,11 +70,11 @@ class LoginFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
-            binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
-            binding.btnLogin.isEnabled = !loading
-            binding.btnGoToRegister.isEnabled = !loading
-            binding.etEmail.isEnabled = !loading
-            binding.etPassword.isEnabled = !loading
+            binding?.progressBar?.visibility = if (loading) View.VISIBLE else View.GONE
+            binding?.btnLogin?.isEnabled = !loading
+            binding?.btnGoToRegister?.isEnabled = !loading
+            binding?.etEmail?.isEnabled = !loading
+            binding?.etPassword?.isEnabled = !loading
         }
 
         viewModel.error.observe(viewLifecycleOwner) { msg ->
@@ -97,6 +95,6 @@ class LoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }
