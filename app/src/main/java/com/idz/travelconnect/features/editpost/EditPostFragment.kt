@@ -28,7 +28,7 @@ class EditPostFragment : Fragment() {
 
     private var selectedImageBitmap: Bitmap? = null
     private var originalPost: Post? = null
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()

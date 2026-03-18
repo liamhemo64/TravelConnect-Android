@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import com.idz.travelconnect.base.Completion
+import com.idz.travelconnect.base.ErrorCompletion
 import com.idz.travelconnect.dao.AppLocalDB
 import com.idz.travelconnect.data.model.FirebaseModel
 import com.idz.travelconnect.data.model.StorageModel
@@ -32,15 +33,15 @@ class PostRepository private constructor() {
     fun getPostById(postId: String): LiveData<Post?> = database.postDao.getPostById(postId)
 
     fun refreshPosts(completion: Completion = {}) {
-        val since = Post.lastSyncTimestamp
-        firebaseModel.getAllPosts(since) { posts ->
+        val lastUpdated = Post.lastUpdated
+        firebaseModel.getAllPosts(lastUpdated) { posts ->
             executor.execute {
-                var latestTime = since
+                var time = lastUpdated
                 for (post in posts) {
                     database.postDao.insertPosts(post)
-                    post.lastUpdated?.let { if (it > latestTime) latestTime = it }
+                    post.lastUpdated?.let { if (time < it) time = it }
                 }
-                if (latestTime > since) Post.lastSyncTimestamp = latestTime
+                Post.lastUpdated = time
                 mainHandler.post { completion() }
             }
         }
@@ -56,7 +57,8 @@ class PostRepository private constructor() {
         endDate: String,
         description: String,
         imageBitmap: Bitmap?,
-        completion: Completion
+        completion: Completion,
+        onError: ErrorCompletion = {}
     ) {
         val postId = UUID.randomUUID().toString()
 
@@ -84,9 +86,16 @@ class PostRepository private constructor() {
 
         if (imageBitmap != null) {
             storageModel.uploadImage(
+                api = StorageModel.StorageAPI.CLOUDINARY,
                 folderPath = "posts/$postId",
                 image = imageBitmap
-            ) { url -> savePost(url) }
+            ) { url ->
+                if (url != null) {
+                    savePost(url)
+                } else {
+                    mainHandler.post { onError("Failed to upload image. Check your connection.") }
+                }
+            }
         } else {
             savePost(null)
         }
@@ -109,6 +118,7 @@ class PostRepository private constructor() {
 
         if (newImageBitmap != null) {
             storageModel.uploadImage(
+                api = StorageModel.StorageAPI.CLOUDINARY,
                 folderPath = "posts/${post.id}",
                 image = newImageBitmap
             ) { url -> saveUpdated(url) }
@@ -119,10 +129,10 @@ class PostRepository private constructor() {
 
     fun deletePost(postId: String, completion: Completion) {
         firebaseModel.deletePost(postId) {
-                executor.execute {
-                    database.postDao.deletePost(postId)
-                    mainHandler.post { completion() }
-                }
+            executor.execute {
+                database.postDao.deletePost(postId)
+                mainHandler.post { completion() }
+            }
         }
     }
 }

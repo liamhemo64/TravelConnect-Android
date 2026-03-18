@@ -3,7 +3,6 @@ package com.idz.travelconnect.features.postdetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.data.repository.auth.AuthRepository
 
 import com.idz.travelconnect.data.repository.post.PostRepository
@@ -28,12 +27,11 @@ class PostDetailViewModel : ViewModel() {
         post = postRepository.getPostById(postId)
     }
 
-    fun deletePost(completion: Completion) {
+    fun deletePost() {
         isLoading.value = true
         postRepository.deletePost(_postId) {
             isLoading.value = false
             postDeleted.value = true
-            completion()
         }
     }
 
