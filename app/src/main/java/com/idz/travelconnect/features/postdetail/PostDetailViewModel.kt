@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.idz.travelconnect.data.repository.auth.AuthRepository
 import com.idz.travelconnect.data.repository.comment.CommentRepository
 
 import com.idz.travelconnect.data.repository.post.PostRepository
