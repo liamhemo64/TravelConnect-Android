@@ -34,6 +34,12 @@
     <string name="post_updated">Trip updated!</string>
     <string name="post_deleted">Trip deleted.</string>
 
+    <!-- Comments -->
+    <string name="comments">Comments</string>
+    <string name="add_comment_hint">Add a comment…</string>
+    <string name="no_comments">No comments yet.</string>
+    <string name="delete_comment">Delete comment?</string>
+
     <!-- General -->
     <string name="error_generic">Something went wrong. Please try again.</string>
     <string name="error_fields_required">Please fill in all required fields.</string>

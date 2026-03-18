@@ -9,15 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.idz.travelconnect.R
 import com.idz.travelconnect.databinding.FragmentPostDetailsBinding
+import com.idz.travelconnect.features.postdetail.comment.CommentsAdapter
 import com.squareup.picasso.Picasso
+import kotlin.toString
 
 class PostDetailFragment : Fragment() {
 
     private var binding: FragmentPostDetailsBinding? = null
     private val viewModel: PostDetailViewModel by viewModels()
     private val args: PostDetailFragmentArgs by navArgs()
+
+    private lateinit var commentsAdapter: CommentsAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,13 +37,39 @@ class PostDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.init(args.postId)
+        setupCommentsRecyclerView()
         setupObservers()
         setupListeners()
+    }
+
+    private fun setupCommentsRecyclerView() {
+        commentsAdapter = CommentsAdapter(
+            currentUserId = viewModel.currentUserId,
+            onDeleteClick = { comment ->
+                AlertDialog.Builder(requireContext())
+                    .setMessage(getString(R.string.delete_comment))
+                    .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                        viewModel.deleteComment(comment.id)
+                    }
+                    .setNegativeButton(getString(R.string.cancel), null)
+                    .show()
+            }
+        )
+        binding?.rvComments?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.rvComments?.adapter = commentsAdapter
     }
 
     private fun setupListeners() {
         binding?.btnBack?.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding?.btnSendComment?.setOnClickListener {
+            val text = binding?.etComment?.text?.toString() ?: ""
+            if (text.isNotBlank()) {
+                viewModel.addComment(text)
+                binding?.etComment?.setText("")
+            }
         }
 
         binding?.btnEdit?.setOnClickListener {
@@ -93,6 +125,11 @@ class PostDetailFragment : Fragment() {
                 b.btnEdit.visibility = View.GONE
                 b.btnDelete.visibility = View.GONE
             }
+        }
+
+        viewModel.comments.observe(viewLifecycleOwner) { comments ->
+            commentsAdapter.submitList(comments)
+            binding?.tvNoComments?.visibility = if (comments.isEmpty()) View.VISIBLE else View.GONE
         }
 
         viewModel.postDeleted.observe(viewLifecycleOwner) { deleted ->
