@@ -76,9 +76,13 @@ class PostRepository private constructor() {
                 imageUrl = imageUrl,
                 lastUpdated = System.currentTimeMillis()
             )
-            firebaseModel.savePost(post) {
-                executor.execute {
-                    database.postDao.insertPosts(post)
+            
+            // Offline-first: save locally first
+            executor.execute {
+                database.postDao.insertPosts(post)
+                
+                // Then sync with Firebase
+                firebaseModel.savePost(post) {
                     mainHandler.post { completion() }
                 }
             }
@@ -107,10 +111,17 @@ class PostRepository private constructor() {
         completion: Completion
     ) {
         fun saveUpdated(imageUrl: String?) {
-            val updated = post.copy(imageUrl = imageUrl ?: post.imageUrl)
-            firebaseModel.savePost(updated) {
-                executor.execute {
-                    database.postDao.insertPosts(updated)
+            val updated = post.copy(
+                imageUrl = imageUrl ?: post.imageUrl,
+                lastUpdated = System.currentTimeMillis()
+            )
+            
+            // Offline-first: update locally first
+            executor.execute {
+                database.postDao.insertPosts(updated)
+                
+                // Then sync with Firebase
+                firebaseModel.savePost(updated) {
                     mainHandler.post { completion() }
                 }
             }
@@ -128,11 +139,14 @@ class PostRepository private constructor() {
     }
 
     fun deletePost(postId: String, completion: Completion) {
-        firebaseModel.deletePost(postId) {
-            firebaseModel.deleteCommentsForPost(postId) {
-                executor.execute {
-                    database.postDao.deletePost(postId)
-                    database.commentDao.deleteCommentsForPost(postId)
+        // Offline-first: delete locally first
+        executor.execute {
+            database.postDao.deletePost(postId)
+            database.commentDao.deleteCommentsForPost(postId)
+            
+            // Then sync with Firebase
+            firebaseModel.deletePost(postId) {
+                firebaseModel.deleteCommentsForPost(postId) {
                     mainHandler.post { completion() }
                 }
             }
