@@ -1,7 +1,6 @@
 package com.idz.travelconnect.data.model
 
 import com.google.firebase.Firebase
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.firestore
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.model.Post
@@ -16,9 +15,8 @@ class FirebaseModel {
 
     // ── Posts ──────────────────────────────────────────────────────────────
 
-    fun getAllPosts(since: Long, completion: (List<Post>) -> Unit) {
+    fun getAllPosts(completion: (List<Post>) -> Unit) {
         db.collection(POSTS)
-            .whereGreaterThanOrEqualTo(Post.LAST_UPDATED_KEY, Timestamp(since / 1000, 0))
             .get()
             .addOnCompleteListener { result ->
                 if (result.isSuccessful) {
