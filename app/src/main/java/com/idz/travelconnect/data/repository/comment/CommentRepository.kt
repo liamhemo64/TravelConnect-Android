@@ -5,7 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.dao.AppLocalDB
-import com.idz.travelconnect.dao.CommentDao
 import com.idz.travelconnect.data.model.FirebaseModel
 import com.idz.travelconnect.model.Comment
 import java.util.UUID
@@ -52,18 +51,25 @@ class CommentRepository private constructor() {
             timestamp = System.currentTimeMillis(),
             lastUpdated = System.currentTimeMillis()
         )
-        firebaseModel.saveComment(comment) {
-            executor.execute {
-                database.commentDao.insertComments(comment)
+        
+        // Offline-first: Save locally immediately so UI updates instantly
+        executor.execute {
+            database.commentDao.insertComments(comment)
+            
+            // Then sync with Firebase in the background
+            firebaseModel.saveComment(comment) {
                 mainHandler.post { completion() }
             }
         }
     }
 
     fun deleteComment(commentId: String, completion: Completion) {
-        firebaseModel.deleteComment(commentId) {
-            executor.execute {
-                database.commentDao.deleteComment(commentId)
+        // Offline-first: Delete locally immediately
+        executor.execute {
+            database.commentDao.deleteComment(commentId)
+            
+            // Then sync with Firebase
+            firebaseModel.deleteComment(commentId) {
                 mainHandler.post { completion() }
             }
         }
