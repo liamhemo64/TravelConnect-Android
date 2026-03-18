@@ -1,11 +1,9 @@
 package com.idz.travelconnect.model
 
-import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
-import com.idz.travelconnect.TravelConnectApplication
 
 @Entity(tableName = "posts")
 data class Post(
@@ -22,17 +20,6 @@ data class Post(
     val lastUpdated: Long?
 ) {
     companion object {
-        var lastSyncTimestamp: Long
-            get() = TravelConnectApplication.Globals.appContext
-                ?.getSharedPreferences("travelconnect_prefs", Context.MODE_PRIVATE)
-                ?.getLong(LAST_SYNC_KEY, 0) ?: 0
-            set(value) {
-                TravelConnectApplication.Globals.appContext
-                    ?.getSharedPreferences("travelconnect_prefs", Context.MODE_PRIVATE)
-                    ?.edit()?.putLong(LAST_SYNC_KEY, value)?.apply()
-            }
-
-        const val LAST_SYNC_KEY = "post_last_sync"
         const val ID_KEY = "id"
         const val USER_ID_KEY = "userId"
         const val USER_NAME_KEY = "userName"
