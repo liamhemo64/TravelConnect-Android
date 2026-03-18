@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Country Info Section -->
+        <LinearLayout
+            android:id="@+id/countryInfoSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#F0F4FF"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <ImageView
+                    android:id="@+id/ivFlag"
+                    android:layout_width="52dp"
+                    android:layout_height="36dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="Country flag" />
+
+                <TextView
+                    android:id="@+id/tvCountryName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvRegion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:id="@+id/tvLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:id="@+id/tvCurrency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+        </LinearLayout>
+
+        <!-- Your Request Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_your_request"
+            android:textColor="@color/textSecondary"
+            android:textSize="11sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="4dp" />
+
+        <!-- User query text -->
+        <TextView
+            android:id="@+id/tvUserQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            tools:text="I want a recommendation"
+            xmlns:tools="http://schemas.android.com/tools" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:layout_marginBottom="12dp" />
+
+        <!-- AI Response Label with sparkle -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@android:drawable/star_on"
+                android:tint="@color/colorPrimary"
+                android:layout_marginEnd="4dp"
+                android:contentDescription="AI icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_ai_response"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- AI Response text -->
+        <TextView
+            android:id="@+id/tvAiResponse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:lineSpacingMultiplier="1.4"
+            android:layout_marginBottom="12dp"
+            tools:text="Great question! For a 7-day itinerary, I suggest: Day 1-2: Explore Paris (Eiffel Tower, Louvre, Montmartre). Day 3-4: Take the train to Lyon for amazing food."
+            xmlns:tools="http://schemas.android.com/tools" />
+
+        <!-- Timestamp -->
+        <TextView
+            android:id="@+id/tvTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textTertiary"
+            android:textSize="11sp"
+            tools:text="27 18:37, Tuesday"
+            xmlns:tools="http://schemas.android.com/tools" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.data.repository.auth.AuthRepository
 import com.idz.travelconnect.data.repository.comment.CommentRepository
 
@@ -38,12 +37,11 @@ class PostDetailViewModel : ViewModel() {
         commentRepository.refreshComments(postId)
     }
 
-    fun deletePost(completion: Completion) {
+    fun deletePost() {
         isLoading.value = true
         postRepository.deletePost(_postId) {
             isLoading.value = false
             postDeleted.value = true
-            completion()
         }
     }
 
