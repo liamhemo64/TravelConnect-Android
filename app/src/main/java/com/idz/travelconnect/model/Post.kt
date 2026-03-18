@@ -22,17 +22,21 @@ data class Post(
     val lastUpdated: Long?
 ) {
     companion object {
-        var lastSyncTimestamp: Long
-            get() = TravelConnectApplication.Globals.appContext
-                ?.getSharedPreferences("travelconnect_prefs", Context.MODE_PRIVATE)
-                ?.getLong(LAST_SYNC_KEY, 0) ?: 0
+
+        var lastUpdated: Long
+            get() {
+                return TravelConnectApplication.appContext
+                    ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                    ?.getLong(LAST_UPDATED_KEY, 0) ?: 0
+            }
             set(value) {
-                TravelConnectApplication.Globals.appContext
-                    ?.getSharedPreferences("travelconnect_prefs", Context.MODE_PRIVATE)
-                    ?.edit()?.putLong(LAST_SYNC_KEY, value)?.apply()
+                TravelConnectApplication.appContext
+                    ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                    ?.edit()
+                    ?.putLong(LAST_UPDATED_KEY, value)
+                    ?.apply()
             }
 
-        const val LAST_SYNC_KEY = "post_last_sync"
         const val ID_KEY = "id"
         const val USER_ID_KEY = "userId"
         const val USER_NAME_KEY = "userName"
