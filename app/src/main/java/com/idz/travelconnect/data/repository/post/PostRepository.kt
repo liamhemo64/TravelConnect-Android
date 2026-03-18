@@ -119,10 +119,13 @@ class PostRepository private constructor() {
 
     fun deletePost(postId: String, completion: Completion) {
         firebaseModel.deletePost(postId) {
+            firebaseModel.deleteCommentsForPost(postId) {
                 executor.execute {
                     database.postDao.deletePost(postId)
+                    database.commentDao.deleteCommentsForPost(postId)
                     mainHandler.post { completion() }
                 }
+            }
         }
     }
 }
