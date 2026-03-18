@@ -15,7 +15,7 @@
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
         android:text="New Post"
-        android:textColor="@color/post_text_primary"
+        android:textColor="@color/textPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
         android:id="@+id/dividerTop"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/post_divider"
+        android:background="@color/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:text="Add Photo"
-                        android:textColor="@color/post_text_primary"
+                        android:textColor="@color/textPrimary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -149,8 +149,8 @@
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:textColor="@color/post_text_primary"
-                    android:textColorHint="@color/nav_inactive"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/textTertiary"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -167,8 +167,8 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="14dp"
-                android:textColor="@color/post_text_primary"
-                android:textColorHint="@color/nav_inactive"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textTertiary"
                 android:textSize="15sp" />
 
             <!-- ─── Dates Row ─── -->
@@ -188,8 +188,8 @@
                     android:hint="Start date"
                     android:maxLines="1"
                     android:padding="14dp"
-                    android:textColor="@color/post_text_primary"
-                    android:textColorHint="@color/nav_inactive"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/textTertiary"
                     android:textSize="15sp"
                     android:focusable="false"
                     android:clickable="true" />
@@ -204,8 +204,8 @@
                     android:hint="End date"
                     android:maxLines="1"
                     android:padding="14dp"
-                    android:textColor="@color/post_text_primary"
-                    android:textColorHint="@color/nav_inactive"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/textTertiary"
                     android:textSize="15sp"
                     android:focusable="false"
                     android:clickable="true" />
@@ -225,8 +225,8 @@
                 android:minHeight="140dp"
                 android:padding="14dp"
                 android:scrollbars="vertical"
-                android:textColor="@color/post_text_primary"
-                android:textColorHint="@color/nav_inactive"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textTertiary"
                 android:textSize="15sp" />
 
             <!-- ─── Loading Indicator ─── -->
@@ -236,7 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:indeterminateTint="@color/post_primary_blue"
+                android:indeterminateTint="@color/colorPrimary"
                 android:visibility="gone" />
 
         </LinearLayout>
