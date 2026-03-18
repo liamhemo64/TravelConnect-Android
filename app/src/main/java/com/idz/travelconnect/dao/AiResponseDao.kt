@@ -13,6 +13,6 @@ interface AiResponseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertResponse(response: AiResponse)
 
-    @Query("SELECT * FROM ai_responses ORDER BY timestamp DESC")
-    fun getAllResponses(): LiveData<List<AiResponse>>
+    @Query("SELECT * FROM ai_responses WHERE userId = :userId ORDER BY timestamp DESC")
+    fun getResponsesByUser(userId: String): LiveData<List<AiResponse>>
 }
