@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.idz.travelconnect.model.AiResponse
 import com.idz.travelconnect.model.Post
 
-@Database(entities = [Post::class, AiResponse::class], version = 7)
+@Database(entities = [Post::class, AiResponse::class], version = 8)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract val postDao: PostDao
     abstract val aiResponseDao: AiResponseDao
