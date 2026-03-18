@@ -2,13 +2,17 @@ package com.idz.travelconnect.features.postdetail.comment
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.idz.travelconnect.databinding.ItemCommentBinding
 import com.idz.travelconnect.features.postdetail.comment.CommentsAdapter.Companion.timeFormat
 import com.idz.travelconnect.model.Comment
 import com.squareup.picasso.Picasso
 import java.util.Date
 
-class CommentViewHolder(private val binding: ItemCommentBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class CommentViewHolder(
+    private val binding: ItemCommentBinding,
+    private val currentUserId: String?,
+    private val onDeleteClick: (Comment) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(comment: Comment) {
         binding.tvCommentUserName.text = comment.userName
@@ -23,7 +27,7 @@ class CommentViewHolder(private val binding: ItemCommentBinding) :
                 .into(binding.ivCommentAvatar)
         }
 
-        if (comment.userId == currentUserId) {
+        if (currentUserId != null && comment.userId == currentUserId) {
             binding.ivDeleteComment.visibility = View.VISIBLE
             binding.ivDeleteComment.setOnClickListener { onDeleteClick(comment) }
         } else {

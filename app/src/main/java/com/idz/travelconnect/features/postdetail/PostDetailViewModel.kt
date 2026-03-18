@@ -5,27 +5,37 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.data.repository.auth.AuthRepository
+import com.idz.travelconnect.data.repository.comment.CommentRepository
 
 import com.idz.travelconnect.data.repository.post.PostRepository
+import com.idz.travelconnect.model.Comment
 
 import com.idz.travelconnect.model.Post
 
 class PostDetailViewModel : ViewModel() {
 
     private val postRepository = PostRepository.shared
+
+    private val commentRepository = CommentRepository.shared
+
     private val authRepository = AuthRepository.shared
 
     val isLoading = MutableLiveData(false)
     val error = MutableLiveData<String?>()
     val postDeleted = MutableLiveData(false)
 
+    val currentUserId = authRepository.currentUser?.uid
+
     private var _postId: String = ""
 
     lateinit var post: LiveData<Post?>
+    lateinit var comments: LiveData<List<Comment>>
 
     fun init(postId: String) {
         _postId = postId
         post = postRepository.getPostById(postId)
+        comments = commentRepository.getCommentsForPost(postId)
+        commentRepository.refreshComments(postId)
     }
 
     fun deletePost(completion: Completion) {
@@ -37,8 +47,24 @@ class PostDetailViewModel : ViewModel() {
         }
     }
 
+    fun addComment(text: String) {
+        if (text.isBlank()) return
+        val user = authRepository.currentUser ?: return
+
+        commentRepository.addComment(
+            postId = _postId,
+            userId = user.uid,
+            userName = user?.displayName ?: user.displayName ?: "Traveller",
+            userAvatarUrl = null, //for now without photo - will be fixed later
+            text = text.trim()
+        ) {}
+    }
+
+    fun deleteComment(commentId: String) {
+        commentRepository.deleteComment(commentId) {}
+    }
+
     fun isOwner(post: Post): Boolean {
-        val currentId = authRepository.currentUser?.uid
-        return currentId != null && post.userId == currentId
+        return currentUserId != null && post.userId == currentUserId
     }
 }
