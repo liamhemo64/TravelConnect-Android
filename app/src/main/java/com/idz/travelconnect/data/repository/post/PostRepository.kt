@@ -33,11 +33,15 @@ class PostRepository private constructor() {
     fun getPostById(postId: String): LiveData<Post?> = database.postDao.getPostById(postId)
 
     fun refreshPosts(completion: Completion = {}) {
-        firebaseModel.getAllPosts { posts ->
+        val lastUpdated = Post.lastUpdated
+        firebaseModel.getAllPosts(lastUpdated) { posts ->
             executor.execute {
+                var time = lastUpdated
                 for (post in posts) {
                     database.postDao.insertPosts(post)
+                    post.lastUpdated?.let { if (time < it) time = it }
                 }
+                Post.lastUpdated = time
                 mainHandler.post { completion() }
             }
         }
