@@ -5,9 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.idz.travelconnect.BuildConfig
 import com.idz.travelconnect.base.GEMINI_MODEL_NAME
 import com.idz.travelconnect.dao.AppLocalDB
+import com.idz.travelconnect.data.repository.RestCountriesRepository
 import com.idz.travelconnect.model.AiResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -17,7 +20,9 @@ class AiAssistantViewModel : ViewModel() {
 
     private val dao = AppLocalDB.db.aiResponseDao
 
-    val responses: LiveData<List<AiResponse>> = dao.getAllResponses()
+    private val currentUserId get() = Firebase.auth.currentUser?.uid ?: ""
+
+    val responses: LiveData<List<AiResponse>> = dao.getResponsesByUser(currentUserId)
 
     val isLoading = MutableLiveData(false)
     val error = MutableLiveData<String?>()
@@ -52,6 +57,7 @@ class AiAssistantViewModel : ViewModel() {
 
                 dao.insertResponse(
                     AiResponse(
+                        userId = currentUserId,
                         userQuery = "$country - $userQuery",
                         aiResponse = responseText,
                         flagUrl = countryInfo?.flagUrl ?: "",
