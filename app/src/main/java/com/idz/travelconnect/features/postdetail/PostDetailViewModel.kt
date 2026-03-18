@@ -3,6 +3,8 @@ package com.idz.travelconnect.features.postdetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.data.repository.auth.AuthRepository
 import com.idz.travelconnect.data.repository.comment.CommentRepository
@@ -18,13 +20,11 @@ class PostDetailViewModel : ViewModel() {
 
     private val commentRepository = CommentRepository.shared
 
-    private val authRepository = AuthRepository.shared
-
     val isLoading = MutableLiveData(false)
     val error = MutableLiveData<String?>()
     val postDeleted = MutableLiveData(false)
 
-    val currentUserId = authRepository.currentUser?.uid
+    val currentUser = Firebase.auth.currentUser
 
     private var _postId: String = ""
 
@@ -49,13 +49,13 @@ class PostDetailViewModel : ViewModel() {
 
     fun addComment(text: String) {
         if (text.isBlank()) return
-        val user = authRepository.currentUser ?: return
+        val user = currentUser ?: return
 
         commentRepository.addComment(
             postId = _postId,
             userId = user.uid,
-            userName = user?.displayName ?: user.displayName ?: "Traveller",
-            userAvatarUrl = null, //for now without photo - will be fixed later
+            userName = user.displayName ?: user.displayName ?: "Traveller",
+            userAvatarUrl = user.photoUrl.toString(),
             text = text.trim()
         ) {}
     }
@@ -65,6 +65,6 @@ class PostDetailViewModel : ViewModel() {
     }
 
     fun isOwner(post: Post): Boolean {
-        return currentUserId != null && post.userId == currentUserId
+        return currentUser?.uid != null && post.userId == currentUser.uid
     }
 }
