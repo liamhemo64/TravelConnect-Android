@@ -71,28 +71,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateNavSelection(destinationId: Int) {
-        val activeColor = ColorStateList.valueOf(getColor(R.color.nav_active))
-        val inactiveColor = ColorStateList.valueOf(getColor(R.color.nav_inactive))
+        val activeColor = ColorStateList.valueOf(getColor(R.color.colorPrimary))
+        val inactiveColor = ColorStateList.valueOf(getColor(R.color.textSecondary))
 
         bottomNav.iconHome.imageTintList = inactiveColor
-        bottomNav.labelHome.setTextColor(getColor(R.color.nav_inactive))
+        bottomNav.labelHome.setTextColor(getColor(R.color.textSecondary))
         bottomNav.iconPost.imageTintList = inactiveColor
-        bottomNav.labelPost.setTextColor(getColor(R.color.nav_inactive))
+        bottomNav.labelPost.setTextColor(getColor(R.color.textSecondary))
         bottomNav.iconProfile.imageTintList = inactiveColor
-        bottomNav.labelProfile.setTextColor(getColor(R.color.nav_inactive))
+        bottomNav.labelProfile.setTextColor(getColor(R.color.textSecondary))
 
         when (destinationId) {
             R.id.feedFragment -> {
                 bottomNav.iconHome.imageTintList = activeColor
-                bottomNav.labelHome.setTextColor(getColor(R.color.nav_active))
+                bottomNav.labelHome.setTextColor(getColor(R.color.colorPrimary))
             }
             R.id.postFragment -> {
                 bottomNav.iconPost.imageTintList = activeColor
-                bottomNav.labelPost.setTextColor(getColor(R.color.nav_active))
+                bottomNav.labelPost.setTextColor(getColor(R.color.colorPrimary))
             }
             R.id.profileFragment -> {
                 bottomNav.iconProfile.imageTintList = activeColor
-                bottomNav.labelProfile.setTextColor(getColor(R.color.nav_active))
+                bottomNav.labelProfile.setTextColor(getColor(R.color.colorPrimary))
             }
             // aiAssistantFragment: FAB is always gradient, label is always blue — no change needed
         }
