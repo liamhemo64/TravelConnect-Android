@@ -14,7 +14,6 @@ import com.idz.travelconnect.R
 import com.idz.travelconnect.databinding.FragmentPostDetailsBinding
 import com.idz.travelconnect.features.postdetail.comment.CommentsAdapter
 import com.squareup.picasso.Picasso
-import kotlin.toString
 
 class PostDetailFragment : Fragment() {
 
@@ -44,7 +43,7 @@ class PostDetailFragment : Fragment() {
 
     private fun setupCommentsRecyclerView() {
         commentsAdapter = CommentsAdapter(
-            currentUserId = viewModel.currentUserId,
+            currentUserId = viewModel.currentUser?.uid,
             onDeleteClick = { comment ->
                 AlertDialog.Builder(requireContext())
                     .setMessage(getString(R.string.delete_comment))
