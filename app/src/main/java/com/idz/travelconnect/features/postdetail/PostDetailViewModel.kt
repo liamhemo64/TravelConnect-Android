@@ -51,7 +51,7 @@ class PostDetailViewModel : ViewModel() {
         commentRepository.addComment(
             postId = _postId,
             userId = user.uid,
-            userName = user.displayName ?: user.displayName ?: "Traveller",
+            userName = user.displayName ?: "Traveller",
             userAvatarUrl = user.photoUrl.toString(),
             text = text.trim()
         ) {}
