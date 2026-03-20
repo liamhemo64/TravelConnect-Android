@@ -33,6 +33,13 @@
     <string name="post_updated">Trip updated!</string>
     <string name="post_deleted">Trip deleted.</string>
 
+    <!-- Profile -->
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
+    <string name="profile_updated">Profile updated!</string>
+    <string name="my_posts">My Posts</string>
+
     <!-- General -->
     <string name="error_generic">Something went wrong. Please try again.</string>
     <string name="error_fields_required">Please fill in all required fields.</string>
