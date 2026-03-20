@@ -1,21 +1,35 @@
 package com.idz.travelconnect.features.feed
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.idz.travelconnect.R
 import com.idz.travelconnect.databinding.ItemPostBinding
 import com.idz.travelconnect.model.Post
 import com.squareup.picasso.Picasso
+import com.idz.travelconnect.data.repository.comment.CommentRepository
 
 class PostViewHolder(
     private val binding: ItemPostBinding,
+    private val lifecycleOwner: LifecycleOwner,
     private val onPostClick: (Post) -> Unit
 ) :
     RecyclerView.ViewHolder(binding.root) {
+
+    private val commentRepository = CommentRepository.shared
+
     fun bind(post: Post) {
         binding.tvUserName.text = post.userName
         binding.tvPostLocation.text = "${post.destination}, ${post.country}"
         binding.tvDates.text = "${post.startDate} - ${post.endDate}"
-        binding.tvCommentCount.text = "0 comments"
+
+        // Observe comment count reactively
+        commentRepository.getCommentsForPost(post.id).observe(lifecycleOwner) { comments ->
+            val commentCount = comments?.size ?: 0
+            binding.tvCommentCount.text = binding.root.context.getString(R.string.comment_count, commentCount)
+        }
+        
+        // Trigger a refresh of comments for this post to ensure the count is up to date
+        commentRepository.refreshComments(post.id)
 
         if (!post.imageUrl.isNullOrBlank()) {
             binding.ivPostImage.visibility = android.view.View.VISIBLE
