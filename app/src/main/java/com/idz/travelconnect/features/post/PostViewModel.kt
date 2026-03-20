@@ -4,13 +4,18 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.idz.travelconnect.data.repository.auth.AuthRepository
 import com.idz.travelconnect.data.repository.post.PostRepository
+import com.idz.travelconnect.data.repository.user.UserRepository
 
 class PostViewModel : ViewModel() {
 
+    private val authRepository = AuthRepository.shared
+    private val userRepository = UserRepository.shared
     private val postRepository = PostRepository.shared
+
+    private val uid = authRepository.currentUser?.uid ?: ""
+    val user = userRepository.getUser(uid)
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -51,11 +56,11 @@ class PostViewModel : ViewModel() {
 
         _isLoading.value = true
 
-        val currentUser = Firebase.auth.currentUser
+        val appUser = user.value
         postRepository.createPost(
-            userId = currentUser?.uid ?: "",
-            userName = currentUser?.displayName ?: "",
-            userAvatarUrl = currentUser?.photoUrl?.toString(),
+            userId = uid,
+            userName = appUser?.displayName ?: "",
+            userAvatarUrl = appUser?.avatarUrl,
             destination = destination.trim(),
             country = country.trim(),
             startDate = startDate.trim(),
