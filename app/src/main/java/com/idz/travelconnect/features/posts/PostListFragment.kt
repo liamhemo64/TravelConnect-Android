@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.idz.travelconnect.NavGraphDirections
@@ -17,6 +18,10 @@ class PostListFragment : Fragment() {
     private var binding: FragmentPostListBinding? = null
     private val viewModel: PostListViewModel by viewModels()
     private lateinit var adapter: PostsAdapter
+
+    private val lifecycleOwner: LifecycleOwner
+        get() = viewLifecycleOwner
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +41,7 @@ class PostListFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = PostsAdapter(
+            lifecycleOwner,
             onPostClick = { post ->
                 val action = NavGraphDirections.actionGlobalPostDetailFragment(post.id)
                 activity?.let {

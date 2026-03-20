@@ -13,7 +13,8 @@
 
     <!-- Feed -->
     <string name="feed">Feed</string>
-    <string name="no_posts">No trips yet — share your trips today!</string>
+    <string name="no_posts">No trips yet — be the first to share!</string>
+    <string name="new_trip">+ New Trip</string>
     <string name="refresh">Refresh</string>
 
     <!-- Post -->
@@ -32,6 +33,22 @@
     <string name="post_created">Trip posted!</string>
     <string name="post_updated">Trip updated!</string>
     <string name="post_deleted">Trip deleted.</string>
+
+    <!-- AI Assistant -->
+    <string name="ai_assistant_title">AI Travel Assistant</string>
+    <string name="ai_assistant_subtitle">Get personalized travel advice</string>
+    <string name="ai_question_hint">e.g., \'Give me a 5-day itinerary for Tokyo\' or \'What are the best beaches in Bali?\'</string>
+    <string name="btn_get_response">Get AI Response</string>
+    <string name="label_your_request">Your Request</string>
+    <string name="label_ai_response">AI Response</string>
+    <string name="label_saved_responses">Your Saved Responses</string>
+
+    <!-- Comments -->
+    <string name="comments">Comments</string>
+    <string name="add_comment_hint">Add a comment…</string>
+    <string name="no_comments">No comments yet.</string>
+    <string name="comment_count">%d comments</string>
+    <string name="delete_comment">Delete comment?</string>
 
     <!-- Profile -->
     <string name="profile">Profile</string>
