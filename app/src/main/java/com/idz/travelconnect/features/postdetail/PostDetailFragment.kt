@@ -43,7 +43,7 @@ class PostDetailFragment : Fragment() {
 
     private fun setupCommentsRecyclerView() {
         commentsAdapter = CommentsAdapter(
-            currentUserId = viewModel.currentUser?.uid,
+            currentUserId = viewModel.uid,
             onDeleteClick = { comment ->
                 AlertDialog.Builder(requireContext())
                     .setMessage(getString(R.string.delete_comment))
