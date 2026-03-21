@@ -6,11 +6,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorBackground">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
         android:background="?attr/colorSurface">
+
+        <!-- Sign out button - Top right of the profile header -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignOut"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/signout"
+            app:iconTint="@android:color/holo_red_dark"
+            android:contentDescription="@string/logout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivAvatar"
