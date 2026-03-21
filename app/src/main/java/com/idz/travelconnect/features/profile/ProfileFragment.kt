@@ -63,6 +63,11 @@ class ProfileFragment : Fragment() {
         binding?.ivEditAvatar?.setOnClickListener {
             if (isEditing) pickImageLauncher.launch("image/*")
         }
+
+        binding?.btnSignOut?.setOnClickListener {
+            viewModel.signOut()
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+        }
     }
 
     private fun setupPostList(savedInstanceState: Bundle?) {

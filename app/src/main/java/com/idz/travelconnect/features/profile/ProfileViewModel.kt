@@ -52,4 +52,8 @@ class ProfileViewModel : ViewModel() {
             profileUpdated.value = true
         }
     }
+
+    fun signOut() {
+        authRepository.signOut()
+    }
 }

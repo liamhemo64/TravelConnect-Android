@@ -67,4 +67,8 @@ class FirebaseAuthModel {
                 onError(exception.message ?: "Registration failed.")
             }
     }
+
+    fun signOut () {
+        firebaseAuth.signOut()
+    }
 }
