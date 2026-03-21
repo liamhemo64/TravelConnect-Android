@@ -60,8 +60,4 @@ class PostDetailViewModel : ViewModel() {
     fun deleteComment(commentId: String) {
         commentRepository.deleteComment(commentId) {}
     }
-
-    fun isOwner(post: Post): Boolean {
-        return uid.isNotEmpty() && post.userId == uid
-    }
 }
