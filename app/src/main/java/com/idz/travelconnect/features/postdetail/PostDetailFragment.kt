@@ -90,11 +90,10 @@ class PostDetailFragment : Fragment() {
 
     private fun bindPost() {
         val post = viewModel.post.value ?: return
-        val appUser = viewModel.currentAppUser.value
-        val isOwner = viewModel.isOwner(post)
+        val ownUser = viewModel.currentAppUser.value?.takeIf { it.uid == post.userId }
 
         binding?.tvLocation?.text = "${post.destination}, ${post.country}"
-        binding?.tvUserName?.text = if (isOwner && appUser != null) appUser.displayName else post.userName
+        binding?.tvUserName?.text = ownUser?.displayName ?: post.userName
         binding?.tvDates?.text = "${post.startDate} – ${post.endDate}"
         binding?.tvDescription?.text = post.description
 
@@ -109,7 +108,7 @@ class PostDetailFragment : Fragment() {
                 .into(b.ivPostImage)
         }
 
-        val avatarUrl = if (isOwner && appUser != null) appUser.avatarUrl else post.userAvatarUrl
+        val avatarUrl = ownUser?.avatarUrl ?: post.userAvatarUrl
         if (!avatarUrl.isNullOrBlank()) {
             Picasso.get()
                 .load(avatarUrl)
@@ -118,7 +117,7 @@ class PostDetailFragment : Fragment() {
                 .into(b.ivUserAvatar)
         }
 
-        if (isOwner) {
+        if (ownUser != null) {
             b.btnEdit.visibility = View.VISIBLE
             b.btnDelete.visibility = View.VISIBLE
         } else {
