@@ -28,7 +28,30 @@ class CommentRepository private constructor() {
         firebaseModel.getCommentsForPost(postId) { comments ->
             executor.execute {
                 database.commentDao.insertComments(*comments.toTypedArray())
-                mainHandler.post { completion() }
+
+                val userIds = comments.map { it.userId }.distinct()
+                var remaining = userIds.size
+                if (remaining == 0) {
+                    mainHandler.post { completion() }
+                    return@execute
+                }
+                val fetchedUsers = mutableListOf<com.idz.travelconnect.model.User>()
+                for (uid in userIds) {
+                    firebaseModel.getUserById(uid) { user ->
+                        synchronized(fetchedUsers) {
+                            if (user != null) {
+                                fetchedUsers.add(user)
+                            }
+                            remaining--
+                            if (remaining == 0) {
+                                executor.execute {
+                                    database.userDao.insertUsers(fetchedUsers)
+                                    mainHandler.post { completion() }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -36,8 +59,6 @@ class CommentRepository private constructor() {
     fun addComment(
         postId: String,
         userId: String,
-        userName: String,
-        userAvatarUrl: String?,
         text: String,
         completion: Completion
     ) {
@@ -45,8 +66,6 @@ class CommentRepository private constructor() {
             id = UUID.randomUUID().toString(),
             postId = postId,
             userId = userId,
-            userName = userName,
-            userAvatarUrl = userAvatarUrl,
             text = text,
             timestamp = System.currentTimeMillis(),
             lastUpdated = System.currentTimeMillis()

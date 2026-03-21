@@ -17,10 +17,6 @@ class PostsAdapter(
 ) : ListAdapter<Post, PostViewHolder>(DIFF_CALLBACK) {
 
     var currentUser: User? = null
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
