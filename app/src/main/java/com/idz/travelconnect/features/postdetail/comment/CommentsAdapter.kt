@@ -17,10 +17,6 @@ class CommentsAdapter(
 ) : ListAdapter<Comment, CommentViewHolder>(DIFF_CALLBACK) {
 
     var currentUser: User? = null
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Comment>() {

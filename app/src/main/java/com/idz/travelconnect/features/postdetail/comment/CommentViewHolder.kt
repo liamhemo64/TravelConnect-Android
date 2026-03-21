@@ -27,7 +27,6 @@ class CommentViewHolder(
 
     fun bind(comment: Comment, currentUser: User?) {
         cleanup()
-        resetUi()
         
         val ownUser = currentUser?.takeIf { it.uid == comment.userId }
         
@@ -54,10 +53,6 @@ class CommentViewHolder(
         }
     }
     
-    private fun resetUi() {
-        binding.tvCommentUserName.text = "..."
-        binding.ivCommentAvatar.setImageResource(R.drawable.avatar)
-    }
     
     private fun cleanup() {
         userObserver?.let { userLiveData?.removeObserver(it) }

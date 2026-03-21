@@ -35,17 +35,19 @@ class CommentRepository private constructor() {
                     mainHandler.post { completion() }
                     return@execute
                 }
+                val fetchedUsers = mutableListOf<com.idz.travelconnect.model.User>()
                 for (uid in userIds) {
                     firebaseModel.getUserById(uid) { user ->
-                        if (user != null) {
-                            executor.execute {
-                                database.userDao.insertUser(user)
+                        synchronized(fetchedUsers) {
+                            if (user != null) {
+                                fetchedUsers.add(user)
                             }
-                        }
-                        synchronized(this) {
                             remaining--
                             if (remaining == 0) {
-                                mainHandler.post { completion() }
+                                executor.execute {
+                                    database.userDao.insertUsers(fetchedUsers)
+                                    mainHandler.post { completion() }
+                                }
                             }
                         }
                     }

@@ -30,11 +30,8 @@ class PostViewHolder(
     private var commentObserver: Observer<List<Comment>>? = null
 
     fun bind(post: Post, currentUser: User?) {
-        // 1. Cleanup old observers
         cleanup()
-        
-        // 2. IMMEDIATELY reset UI to placeholders to prevent "ghost" data from the recycled item
-        resetUi()
+        resetNonUserUi()
 
         val ownUser = currentUser?.takeIf { it.uid == post.userId }
 
@@ -83,9 +80,7 @@ class PostViewHolder(
         binding.root.setOnClickListener { onPostClick(post) }
     }
 
-    private fun resetUi() {
-        binding.tvUserName.text = "..."
-        binding.ivUserAvatar.setImageResource(R.drawable.avatar)
+    private fun resetNonUserUi() {
         binding.tvCommentCount.text = ""
         binding.ivPostImage.setImageResource(android.R.drawable.ic_menu_gallery)
     }
