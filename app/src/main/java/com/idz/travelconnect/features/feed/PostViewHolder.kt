@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.idz.travelconnect.R
 import com.idz.travelconnect.databinding.ItemPostBinding
 import com.idz.travelconnect.model.Post
+import com.idz.travelconnect.model.User
 import com.squareup.picasso.Picasso
 import com.idz.travelconnect.data.repository.comment.CommentRepository
 
@@ -17,8 +18,10 @@ class PostViewHolder(
 
     private val commentRepository = CommentRepository.shared
 
-    fun bind(post: Post) {
-        binding.tvUserName.text = post.userName
+    fun bind(post: Post, currentUser: User?) {
+        val isOwn = currentUser != null && post.userId == currentUser.uid
+
+        binding.tvUserName.text = if (isOwn) currentUser!!.displayName else post.userName
         binding.tvPostLocation.text = "${post.destination}, ${post.country}"
         binding.tvDates.text = "${post.startDate} - ${post.endDate}"
 
@@ -27,7 +30,7 @@ class PostViewHolder(
             val commentCount = comments?.size ?: 0
             binding.tvCommentCount.text = binding.root.context.getString(R.string.comment_count, commentCount)
         }
-        
+
         // Trigger a refresh of comments for this post to ensure the count is up to date
         commentRepository.refreshComments(post.id)
 
@@ -43,9 +46,10 @@ class PostViewHolder(
             binding.ivPostImage.setImageResource(android.R.drawable.ic_menu_gallery)
         }
 
-        if (!post.userAvatarUrl.isNullOrBlank()) {
+        val avatarUrl = if (isOwn) currentUser!!.avatarUrl else post.userAvatarUrl
+        if (!avatarUrl.isNullOrBlank()) {
             Picasso.get()
-                .load(post.userAvatarUrl)
+                .load(avatarUrl)
                 .placeholder(R.drawable.avatar)
                 .fit()
                 .centerCrop()
