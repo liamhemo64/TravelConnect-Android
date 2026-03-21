@@ -3,26 +3,26 @@ package com.idz.travelconnect.features.postdetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.idz.travelconnect.data.repository.auth.AuthRepository
 import com.idz.travelconnect.data.repository.comment.CommentRepository
-
 import com.idz.travelconnect.data.repository.post.PostRepository
+import com.idz.travelconnect.data.repository.user.UserRepository
 import com.idz.travelconnect.model.Comment
-
 import com.idz.travelconnect.model.Post
 
 class PostDetailViewModel : ViewModel() {
 
+    private val authRepository = AuthRepository.shared
+    private val userRepository = UserRepository.shared
     private val postRepository = PostRepository.shared
-
     private val commentRepository = CommentRepository.shared
 
     val isLoading = MutableLiveData(false)
     val error = MutableLiveData<String?>()
     val postDeleted = MutableLiveData(false)
 
-    val currentUser = Firebase.auth.currentUser
+    val uid = authRepository.currentUser?.uid ?: ""
+    val currentAppUser = userRepository.getUser(uid)
 
     private var _postId: String = ""
 
@@ -46,22 +46,18 @@ class PostDetailViewModel : ViewModel() {
 
     fun addComment(text: String) {
         if (text.isBlank()) return
-        val user = currentUser ?: return
+        val appUser = currentAppUser.value ?: return
 
         commentRepository.addComment(
             postId = _postId,
-            userId = user.uid,
-            userName = user.displayName ?: "Traveller",
-            userAvatarUrl = user.photoUrl.toString(),
+            userId = appUser.uid,
+            userName = appUser.displayName,
+            userAvatarUrl = appUser.avatarUrl,
             text = text.trim()
         ) {}
     }
 
     fun deleteComment(commentId: String) {
         commentRepository.deleteComment(commentId) {}
-    }
-
-    fun isOwner(post: Post): Boolean {
-        return currentUser?.uid != null && post.userId == currentUser.uid
     }
 }

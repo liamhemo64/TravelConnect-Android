@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.idz.travelconnect.R
 import com.idz.travelconnect.databinding.FragmentFeedBinding
+import com.idz.travelconnect.features.posts.PostListFragment
 
 class FeedFragment : Fragment() {
 
@@ -30,38 +31,12 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        setupObservers()
-        setupListeners()
-    }
 
-    private fun setupRecyclerView() {
-        adapter = PostsAdapter(
-            lifecycleOwner = viewLifecycleOwner,
-            onPostClick = { post ->
-                val action = FeedFragmentDirections.actionFeedFragmentToPostDetailFragment(post.id)
-                findNavController().navigate(action)
-            }
-        )
-        binding?.rvPosts?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvPosts?.adapter = adapter
-    }
-
-    private fun setupListeners() {
-        binding?.swipeRefresh?.setOnRefreshListener {
-            viewModel.refresh()
-        }
-    }
-
-    private fun setupObservers() {
-        viewModel.posts.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
-            binding?.tvEmpty?.visibility = if (posts.isEmpty()) View.VISIBLE else View.GONE
-            binding?.rvPosts?.visibility = if (posts.isEmpty()) View.GONE else View.VISIBLE
-        }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
-            if (!loading) binding?.swipeRefresh?.isRefreshing = false
+        if (savedInstanceState == null) {
+            val postListFragment = PostListFragment()
+            childFragmentManager.beginTransaction()
+                .replace(R.id.postListContainer, postListFragment)
+                .commit()
         }
     }
 

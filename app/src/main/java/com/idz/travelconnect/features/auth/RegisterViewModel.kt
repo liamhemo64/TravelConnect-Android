@@ -4,10 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idz.travelconnect.data.repository.auth.AuthRepository
+import com.idz.travelconnect.data.repository.user.UserRepository
+import com.idz.travelconnect.model.User
 
 class RegisterViewModel : ViewModel() {
 
     private val authRepository = AuthRepository.shared
+    private val userRepository = UserRepository.shared
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -38,9 +41,18 @@ class RegisterViewModel : ViewModel() {
             password = password,
             displayName = displayName.trim(),
             profileImage = profileImage,
-            onSuccess = { _ ->
-                _isLoading.value = false
-                _registerSuccessData.value = email.trim()
+            onSuccess = { uid ->
+                val appUser = User(
+                    uid = uid,
+                    displayName = displayName.trim(),
+                    email = email.trim(),
+                    avatarUrl = profileImage,
+                    lastUpdated = System.currentTimeMillis()
+                )
+                userRepository.createUser(appUser) {
+                    _isLoading.value = false
+                    _registerSuccessData.value = email.trim()
+                }
             },
             onError = { msg ->
                 _isLoading.value = false
