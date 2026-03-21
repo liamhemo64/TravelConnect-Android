@@ -16,9 +16,9 @@ class CommentViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(comment: Comment, currentUser: User?) {
-        val isOwn = currentUserId != null && comment.userId == currentUserId
-        val displayName = if (isOwn && currentUser != null) currentUser.displayName else comment.userName
-        val avatarUrl = if (isOwn && currentUser != null) currentUser.avatarUrl else comment.userAvatarUrl
+        val ownUser = currentUser?.takeIf { it.uid == comment.userId }
+        val displayName = ownUser?.displayName ?: comment.userName
+        val avatarUrl = ownUser?.avatarUrl ?: comment.userAvatarUrl
 
         binding.tvCommentUserName.text = displayName
         binding.tvCommentText.text = comment.text
@@ -32,7 +32,7 @@ class CommentViewHolder(
                 .into(binding.ivCommentAvatar)
         }
 
-        if (isOwn) {
+        if (ownUser != null) {
             binding.ivDeleteComment.visibility = View.VISIBLE
             binding.ivDeleteComment.setOnClickListener { onDeleteClick(comment) }
         } else {
