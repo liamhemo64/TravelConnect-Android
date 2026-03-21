@@ -32,6 +32,10 @@ class AuthRepository private constructor() {
         firebaseAuthModel.signUp(email, password, displayName, profileImage, onSuccess, onError)
     }
 
+    fun signOut() {
+        firebaseAuthModel.signOut()
+    }
+
     companion object {
         val shared: AuthRepository by lazy { AuthRepository() }
     }
