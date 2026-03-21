@@ -28,7 +28,28 @@ class CommentRepository private constructor() {
         firebaseModel.getCommentsForPost(postId) { comments ->
             executor.execute {
                 database.commentDao.insertComments(*comments.toTypedArray())
-                mainHandler.post { completion() }
+
+                val userIds = comments.map { it.userId }.distinct()
+                var remaining = userIds.size
+                if (remaining == 0) {
+                    mainHandler.post { completion() }
+                    return@execute
+                }
+                for (uid in userIds) {
+                    firebaseModel.getUserById(uid) { user ->
+                        if (user != null) {
+                            executor.execute {
+                                database.commentDao.updateUserInfo(uid, user.displayName, user.avatarUrl)
+                            }
+                        }
+                        synchronized(this) {
+                            remaining--
+                            if (remaining == 0) {
+                                mainHandler.post { completion() }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -42,7 +42,28 @@ class PostRepository private constructor() {
                     post.lastUpdated?.let { if (time < it) time = it }
                 }
                 Post.lastUpdated = time
-                mainHandler.post { completion() }
+
+                val userIds = posts.map { it.userId }.distinct()
+                var remaining = userIds.size
+                if (remaining == 0) {
+                    mainHandler.post { completion() }
+                    return@execute
+                }
+                for (uid in userIds) {
+                    firebaseModel.getUserById(uid) { user ->
+                        if (user != null) {
+                            executor.execute {
+                                database.postDao.updateUserInfo(uid, user.displayName, user.avatarUrl)
+                            }
+                        }
+                        synchronized(this) {
+                            remaining--
+                            if (remaining == 0) {
+                                mainHandler.post { completion() }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -18,4 +18,6 @@ interface CommentDao {
     @Query("DELETE FROM comments WHERE postId = :postId")
     fun deleteCommentsForPost(postId: String)
 
+    @Query("UPDATE comments SET userName = :userName, userAvatarUrl = :userAvatarUrl WHERE userId = :userId")
+    fun updateUserInfo(userId: String, userName: String, userAvatarUrl: String?)
 }
