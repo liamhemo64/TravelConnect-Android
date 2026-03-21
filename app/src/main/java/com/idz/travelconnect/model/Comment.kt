@@ -10,8 +10,6 @@ data class Comment(
     @PrimaryKey val id: String,
     val postId: String,
     val userId: String,
-    val userName: String,
-    val userAvatarUrl: String?,
     val text: String,
     val timestamp: Long,
     val lastUpdated: Long?
@@ -20,8 +18,6 @@ data class Comment(
         const val ID_KEY = "id"
         const val POST_ID_KEY = "postId"
         const val USER_ID_KEY = "userId"
-        const val USER_NAME_KEY = "userName"
-        const val USER_AVATAR_URL_KEY = "userAvatarUrl"
         const val TEXT_KEY = "text"
         const val TIMESTAMP_KEY = "timestamp"
         const val LAST_UPDATED_KEY = "lastUpdated"
@@ -33,8 +29,6 @@ data class Comment(
                 id = json[ID_KEY] as? String ?: "",
                 postId = json[POST_ID_KEY] as? String ?: "",
                 userId = json[USER_ID_KEY] as? String ?: "",
-                userName = json[USER_NAME_KEY] as? String ?: "",
-                userAvatarUrl = json[USER_AVATAR_URL_KEY] as? String,
                 text = json[TEXT_KEY] as? String ?: "",
                 timestamp = ts,
                 lastUpdated = lastUpdatedTs?.toDate()?.time
@@ -47,8 +41,6 @@ data class Comment(
             ID_KEY to id,
             POST_ID_KEY to postId,
             USER_ID_KEY to userId,
-            USER_NAME_KEY to userName,
-            USER_AVATAR_URL_KEY to userAvatarUrl,
             TEXT_KEY to text,
             TIMESTAMP_KEY to timestamp,
             LAST_UPDATED_KEY to FieldValue.serverTimestamp()

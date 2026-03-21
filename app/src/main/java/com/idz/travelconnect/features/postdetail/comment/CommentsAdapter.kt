@@ -1,20 +1,18 @@
 package com.idz.travelconnect.features.postdetail.comment
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.idz.travelconnect.databinding.ItemCommentBinding
 import com.idz.travelconnect.model.Comment
 import com.idz.travelconnect.model.User
-import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CommentsAdapter(
-    private val currentUserId: String?,
+    private val lifecycleOwner: LifecycleOwner,
     private val onDeleteClick: (Comment) -> Unit
 ) : ListAdapter<Comment, CommentViewHolder>(DIFF_CALLBACK) {
 
@@ -34,7 +32,7 @@ class CommentsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
         val binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CommentViewHolder(binding, currentUserId, onDeleteClick)
+        return CommentViewHolder(binding, lifecycleOwner, onDeleteClick)
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {

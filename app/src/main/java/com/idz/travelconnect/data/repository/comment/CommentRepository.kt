@@ -39,7 +39,7 @@ class CommentRepository private constructor() {
                     firebaseModel.getUserById(uid) { user ->
                         if (user != null) {
                             executor.execute {
-                                database.commentDao.updateUserInfo(uid, user.displayName, user.avatarUrl)
+                                database.userDao.insertUser(user)
                             }
                         }
                         synchronized(this) {
@@ -57,8 +57,6 @@ class CommentRepository private constructor() {
     fun addComment(
         postId: String,
         userId: String,
-        userName: String,
-        userAvatarUrl: String?,
         text: String,
         completion: Completion
     ) {
@@ -66,8 +64,6 @@ class CommentRepository private constructor() {
             id = UUID.randomUUID().toString(),
             postId = postId,
             userId = userId,
-            userName = userName,
-            userAvatarUrl = userAvatarUrl,
             text = text,
             timestamp = System.currentTimeMillis(),
             lastUpdated = System.currentTimeMillis()
