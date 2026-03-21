@@ -66,6 +66,10 @@ class PostListFragment : Fragment() {
             binding?.rvPosts?.visibility = if (posts.isEmpty()) View.GONE else View.VISIBLE
         }
 
+        viewModel.currentAppUser.observe(viewLifecycleOwner) { user ->
+            adapter.currentUser = user
+        }
+
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             binding?.swipeRefresh?.isRefreshing = loading
         }
