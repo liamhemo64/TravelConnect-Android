@@ -53,7 +53,7 @@ class PostRepository private constructor() {
                     firebaseModel.getUserById(uid) { user ->
                         if (user != null) {
                             executor.execute {
-                                database.postDao.updateUserInfo(uid, user.displayName, user.avatarUrl)
+                                database.userDao.insertUser(user)
                             }
                         }
                         synchronized(this) {
@@ -70,8 +70,6 @@ class PostRepository private constructor() {
 
     fun createPost(
         userId: String,
-        userName: String,
-        userAvatarUrl: String?,
         destination: String,
         country: String,
         startDate: String,
@@ -87,8 +85,6 @@ class PostRepository private constructor() {
             val post = Post(
                 id = postId,
                 userId = userId,
-                userName = userName,
-                userAvatarUrl = userAvatarUrl,
                 destination = destination,
                 country = country,
                 startDate = startDate,

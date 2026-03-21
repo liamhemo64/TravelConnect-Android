@@ -56,11 +56,8 @@ class PostViewModel : ViewModel() {
 
         _isLoading.value = true
 
-        val appUser = user.value
         postRepository.createPost(
             userId = uid,
-            userName = appUser?.displayName ?: "",
-            userAvatarUrl = appUser?.avatarUrl,
             destination = destination.trim(),
             country = country.trim(),
             startDate = startDate.trim(),

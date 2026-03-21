@@ -20,7 +20,4 @@ interface PostDao {
 
     @Query("DELETE FROM posts WHERE id = :postId")
     fun deletePost(postId: String)
-
-    @Query("UPDATE posts SET userName = :userName, userAvatarUrl = :userAvatarUrl WHERE userId = :userId")
-    fun updateUserInfo(userId: String, userName: String, userAvatarUrl: String?)
 }
