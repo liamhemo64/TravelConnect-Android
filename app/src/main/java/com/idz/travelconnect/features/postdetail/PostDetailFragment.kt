@@ -88,45 +88,56 @@ class PostDetailFragment : Fragment() {
         }
     }
 
-    private fun setupObservers() {
-        viewModel.post.observe(viewLifecycleOwner) { post ->
-            post ?: return@observe
-            binding?.tvLocation?.text = "${post.destination}, ${post.country}"
-            binding?.tvUserName?.text = post.userName
-            binding?.tvDates?.text = "${post.startDate} – ${post.endDate}"
-            binding?.tvDescription?.text = post.description
+    private fun bindPost() {
+        val post = viewModel.post.value ?: return
+        val appUser = viewModel.currentAppUser.value
+        val isOwner = viewModel.isOwner(post)
 
-            val b = binding ?: return@observe
+        binding?.tvLocation?.text = "${post.destination}, ${post.country}"
+        binding?.tvUserName?.text = if (isOwner && appUser != null) appUser.displayName else post.userName
+        binding?.tvDates?.text = "${post.startDate} – ${post.endDate}"
+        binding?.tvDescription?.text = post.description
 
-            if (!post.imageUrl.isNullOrBlank()) {
-                b.ivPostImage.visibility = View.VISIBLE
-                Picasso.get()
-                    .load(post.imageUrl)
-                    .fit()
-                    .centerCrop()
-                    .into(b.ivPostImage)
-            }
+        val b = binding ?: return
 
-            if (!post.userAvatarUrl.isNullOrBlank()) {
-                Picasso.get()
-                    .load(post.userAvatarUrl)
-                    .fit()
-                    .centerCrop()
-                    .into(b.ivUserAvatar)
-            }
-
-            if (viewModel.isOwner(post)) {
-                b.btnEdit.visibility = View.VISIBLE
-                b.btnDelete.visibility = View.VISIBLE
-            } else {
-                b.btnEdit.visibility = View.GONE
-                b.btnDelete.visibility = View.GONE
-            }
+        if (!post.imageUrl.isNullOrBlank()) {
+            b.ivPostImage.visibility = View.VISIBLE
+            Picasso.get()
+                .load(post.imageUrl)
+                .fit()
+                .centerCrop()
+                .into(b.ivPostImage)
         }
+
+        val avatarUrl = if (isOwner && appUser != null) appUser.avatarUrl else post.userAvatarUrl
+        if (!avatarUrl.isNullOrBlank()) {
+            Picasso.get()
+                .load(avatarUrl)
+                .fit()
+                .centerCrop()
+                .into(b.ivUserAvatar)
+        }
+
+        if (isOwner) {
+            b.btnEdit.visibility = View.VISIBLE
+            b.btnDelete.visibility = View.VISIBLE
+        } else {
+            b.btnEdit.visibility = View.GONE
+            b.btnDelete.visibility = View.GONE
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.post.observe(viewLifecycleOwner) { bindPost() }
 
         viewModel.comments.observe(viewLifecycleOwner) { comments ->
             commentsAdapter.submitList(comments)
             binding?.tvNoComments?.visibility = if (comments.isEmpty()) View.VISIBLE else View.GONE
+        }
+
+        viewModel.currentAppUser.observe(viewLifecycleOwner) { user ->
+            commentsAdapter.currentUser = user
+            bindPost()
         }
 
         viewModel.postDeleted.observe(viewLifecycleOwner) { deleted ->
