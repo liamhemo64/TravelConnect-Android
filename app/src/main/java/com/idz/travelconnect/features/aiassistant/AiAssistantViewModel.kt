@@ -48,7 +48,7 @@ class AiAssistantViewModel : ViewModel() {
                     try { RestCountriesRepository.fetchCountry(country) } catch (e: Exception) { null }
                 }
                 val aiDeferred = async {
-                    val prompt = "You are a helpful AI travel assistant. The user is asking about $country. Answer this travel question concisely and helpfully: $userQuery"
+                    val prompt = "You are a helpful AI travel assistant. The user is asking about $country. Answer this travel question concisely and helpfully: $userQuery. Reply in plain text only, no markdown, no bold, no bullet points, no symbols like ** or ##."
                     generativeModel.generateContent(prompt).text ?: "No response received."
                 }
 
