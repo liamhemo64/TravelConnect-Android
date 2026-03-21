@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.idz.travelconnect.databinding.ItemCommentBinding
 import com.idz.travelconnect.features.postdetail.comment.CommentsAdapter.Companion.timeFormat
 import com.idz.travelconnect.model.Comment
+import com.idz.travelconnect.model.User
 import com.squareup.picasso.Picasso
 import java.util.Date
 
@@ -14,20 +15,24 @@ class CommentViewHolder(
     private val onDeleteClick: (Comment) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(comment: Comment) {
-        binding.tvCommentUserName.text = comment.userName
+    fun bind(comment: Comment, currentUser: User?) {
+        val isOwn = currentUserId != null && comment.userId == currentUserId
+        val displayName = if (isOwn && currentUser != null) currentUser.displayName else comment.userName
+        val avatarUrl = if (isOwn && currentUser != null) currentUser.avatarUrl else comment.userAvatarUrl
+
+        binding.tvCommentUserName.text = displayName
         binding.tvCommentText.text = comment.text
         binding.tvCommentTime.text = timeFormat.format(Date(comment.timestamp))
 
-        if (!comment.userAvatarUrl.isNullOrBlank()) {
+        if (!avatarUrl.isNullOrBlank()) {
             Picasso.get()
-                .load(comment.userAvatarUrl)
+                .load(avatarUrl)
                 .fit()
                 .centerCrop()
                 .into(binding.ivCommentAvatar)
         }
 
-        if (currentUserId != null && comment.userId == currentUserId) {
+        if (isOwn) {
             binding.ivDeleteComment.visibility = View.VISIBLE
             binding.ivDeleteComment.setOnClickListener { onDeleteClick(comment) }
         } else {

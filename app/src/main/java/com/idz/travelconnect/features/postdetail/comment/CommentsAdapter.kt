@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.idz.travelconnect.databinding.ItemCommentBinding
 import com.idz.travelconnect.model.Comment
+import com.idz.travelconnect.model.User
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,6 +17,12 @@ class CommentsAdapter(
     private val currentUserId: String?,
     private val onDeleteClick: (Comment) -> Unit
 ) : ListAdapter<Comment, CommentViewHolder>(DIFF_CALLBACK) {
+
+    var currentUser: User? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Comment>() {
@@ -31,6 +38,6 @@ class CommentsAdapter(
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), currentUser)
     }
 }
