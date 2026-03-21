@@ -18,8 +18,7 @@ import java.util.Calendar
 
 class PostFragment : Fragment() {
 
-    private var _binding: FragmentPostBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentPostBinding? = null
 
     private val viewModel: PostViewModel by viewModels()
 
@@ -27,9 +26,9 @@ class PostFragment : Fragment() {
         uri ?: return@registerForActivityResult
         try {
             val bitmap = loadScaledBitmap(uri) ?: return@registerForActivityResult
-            binding.ivSelectedImage.setImageBitmap(bitmap)
-            binding.ivSelectedImage.visibility = View.VISIBLE
-            binding.photoPlaceholder.visibility = View.GONE
+            binding?.ivSelectedImage?.setImageBitmap(bitmap)
+            binding?.ivSelectedImage?.visibility = View.VISIBLE
+            binding?.photoPlaceholder?.visibility = View.GONE
             viewModel.onImageSelected(bitmap)
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "Failed to load image.", Toast.LENGTH_SHORT).show()
@@ -62,41 +61,41 @@ class PostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPostBinding.inflate(inflater, container, false)
+    ): View? {
+        binding = FragmentPostBinding.inflate(inflater, container, false)
         setupView()
         observeViewModel()
-        return binding.root
+        return binding?.root
     }
 
     private fun setupView() {
-        binding.btnChooseGallery.setOnClickListener {
+        binding?.btnChooseGallery?.setOnClickListener {
             galleryLauncher.launch("image/*")
         }
 
-        binding.ivSelectedImage.setOnClickListener {
+        binding?.ivSelectedImage?.setOnClickListener {
             galleryLauncher.launch("image/*")
         }
 
-        binding.etStartDate.setOnClickListener { showDatePicker(binding.etStartDate) }
-        binding.etEndDate.setOnClickListener { showDatePicker(binding.etEndDate) }
+        binding?.etStartDate?.setOnClickListener { showDatePicker(binding?.etStartDate) }
+        binding?.etEndDate?.setOnClickListener { showDatePicker(binding?.etEndDate) }
 
-        binding.btnShare.setOnClickListener {
-            val destination = binding.etDestination.text.toString()
-            val country = binding.etCountry.text.toString()
-            val startDate = binding.etStartDate.text.toString()
-            val endDate = binding.etEndDate.text.toString()
-            val description = binding.etDescription.text.toString()
+        binding?.btnShare?.setOnClickListener {
+            val destination = binding?.etDestination?.text.toString()
+            val country = binding?.etCountry?.text.toString()
+            val startDate = binding?.etStartDate?.text.toString()
+            val endDate = binding?.etEndDate?.text.toString()
+            val description = binding?.etDescription?.text.toString()
             viewModel.createPost(destination, country, startDate, endDate, description)
         }
     }
 
-    private fun showDatePicker(target: TextView) {
+    private fun showDatePicker(target: TextView?) {
         val cal = Calendar.getInstance()
         DatePickerDialog(
             requireContext(),
             { _, year, month, day ->
-                target.text = "%02d/%02d/%d".format(day, month + 1, year)
+                target?.text = "%02d/%02d/%d".format(day, month + 1, year)
             },
             cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH),
@@ -106,8 +105,8 @@ class PostFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.btnShare.isEnabled = !isLoading
+            binding?.loadingIndicator?.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding?.btnShare?.isEnabled = !isLoading
         }
 
         viewModel.error.observe(viewLifecycleOwner) { errorMsg ->
@@ -119,13 +118,13 @@ class PostFragment : Fragment() {
         viewModel.postSuccessData.observe(viewLifecycleOwner) { postId ->
             postId?.let {
                 Toast.makeText(requireContext(), "Post shared!", Toast.LENGTH_SHORT).show()
-                binding.etDestination.text?.clear()
-                binding.etCountry.text?.clear()
-                binding.etStartDate.text = ""
-                binding.etEndDate.text = ""
-                binding.etDescription.text?.clear()
-                binding.ivSelectedImage.visibility = View.GONE
-                binding.photoPlaceholder.visibility = View.VISIBLE
+                binding?.etDestination?.text?.clear()
+                binding?.etCountry?.text?.clear()
+                binding?.etStartDate?.text = ""
+                binding?.etEndDate?.text = ""
+                binding?.etDescription?.text?.clear()
+                binding?.ivSelectedImage?.visibility = View.GONE
+                binding?.photoPlaceholder?.visibility = View.VISIBLE
                 viewModel.clearPostSuccessData()
             }
         }
@@ -133,6 +132,6 @@ class PostFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }

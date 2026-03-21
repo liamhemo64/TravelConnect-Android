@@ -6,6 +6,7 @@ import com.google.firebase.firestore.firestore
 import com.idz.travelconnect.base.Completion
 import com.idz.travelconnect.model.Comment
 import com.idz.travelconnect.model.Post
+import com.idz.travelconnect.model.User
 
 class FirebaseModel {
 
@@ -15,6 +16,8 @@ class FirebaseModel {
         const val POSTS = "posts"
 
         const val COMMENTS = "comments"
+
+        const val USERS = "users"
     }
 
     // ── Posts ──────────────────────────────────────────────────────────────
@@ -93,4 +96,28 @@ class FirebaseModel {
             .addOnFailureListener { completion() }
     }
 
+
+    // ── Users ──────────────────────────────────────────────────────────────
+
+    fun saveUser(user: User, completion: Completion) {
+        db.collection(USERS)
+            .document(user.uid)
+            .set(user.toJson)
+            .addOnSuccessListener { completion() }
+            .addOnFailureListener { completion() }
+    }
+
+    fun getUserById(uid: String, completion: (User?) -> Unit) {
+        db.collection(USERS)
+            .document(uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    completion(User.fromJson(doc.data ?: emptyMap()))
+                } else {
+                    completion(null)
+                }
+            }
+            .addOnFailureListener { completion(null) }
+    }
 }

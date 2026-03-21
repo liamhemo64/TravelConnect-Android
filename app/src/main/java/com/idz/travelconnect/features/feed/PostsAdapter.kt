@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.idz.travelconnect.databinding.ItemPostBinding
 import com.idz.travelconnect.model.Post
+import com.idz.travelconnect.model.User
 
 
 class PostsAdapter(
@@ -14,6 +15,12 @@ class PostsAdapter(
     private val onPostClick: (Post) -> Unit,
     private val onDeleteClick: ((Post) -> Unit)? = null
 ) : ListAdapter<Post, PostViewHolder>(DIFF_CALLBACK) {
+
+    var currentUser: User? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
@@ -28,6 +35,6 @@ class PostsAdapter(
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), currentUser)
     }
 }

@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import com.idz.travelconnect.BuildConfig
 import com.idz.travelconnect.base.GEMINI_MODEL_NAME
 import com.idz.travelconnect.dao.AppLocalDB
 import com.idz.travelconnect.data.repository.RestCountriesRepository
+import com.idz.travelconnect.data.repository.auth.AuthRepository
 import com.idz.travelconnect.model.AiResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,8 +18,9 @@ import kotlinx.coroutines.launch
 class AiAssistantViewModel : ViewModel() {
 
     private val dao = AppLocalDB.db.aiResponseDao
+    private val authRepository = AuthRepository.shared
 
-    private val currentUserId get() = Firebase.auth.currentUser?.uid ?: ""
+    private val currentUserId get() = authRepository.currentUser?.uid ?: ""
 
     val responses: LiveData<List<AiResponse>> = dao.getResponsesByUser(currentUserId)
 

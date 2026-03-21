@@ -43,7 +43,7 @@ class PostDetailFragment : Fragment() {
 
     private fun setupCommentsRecyclerView() {
         commentsAdapter = CommentsAdapter(
-            currentUserId = viewModel.currentUser?.uid,
+            currentUserId = viewModel.uid,
             onDeleteClick = { comment ->
                 AlertDialog.Builder(requireContext())
                     .setMessage(getString(R.string.delete_comment))
@@ -88,45 +88,55 @@ class PostDetailFragment : Fragment() {
         }
     }
 
-    private fun setupObservers() {
-        viewModel.post.observe(viewLifecycleOwner) { post ->
-            post ?: return@observe
-            binding?.tvLocation?.text = "${post.destination}, ${post.country}"
-            binding?.tvUserName?.text = post.userName
-            binding?.tvDates?.text = "${post.startDate} – ${post.endDate}"
-            binding?.tvDescription?.text = post.description
+    private fun bindPost() {
+        val post = viewModel.post.value ?: return
+        val ownUser = viewModel.currentAppUser.value?.takeIf { it.uid == post.userId }
 
-            val b = binding ?: return@observe
+        binding?.tvLocation?.text = "${post.destination}, ${post.country}"
+        binding?.tvUserName?.text = ownUser?.displayName ?: post.userName
+        binding?.tvDates?.text = "${post.startDate} – ${post.endDate}"
+        binding?.tvDescription?.text = post.description
 
-            if (!post.imageUrl.isNullOrBlank()) {
-                b.ivPostImage.visibility = View.VISIBLE
-                Picasso.get()
-                    .load(post.imageUrl)
-                    .fit()
-                    .centerCrop()
-                    .into(b.ivPostImage)
-            }
+        val b = binding ?: return
 
-            if (!post.userAvatarUrl.isNullOrBlank()) {
-                Picasso.get()
-                    .load(post.userAvatarUrl)
-                    .fit()
-                    .centerCrop()
-                    .into(b.ivUserAvatar)
-            }
-
-            if (viewModel.isOwner(post)) {
-                b.btnEdit.visibility = View.VISIBLE
-                b.btnDelete.visibility = View.VISIBLE
-            } else {
-                b.btnEdit.visibility = View.GONE
-                b.btnDelete.visibility = View.GONE
-            }
+        if (!post.imageUrl.isNullOrBlank()) {
+            b.ivPostImage.visibility = View.VISIBLE
+            Picasso.get()
+                .load(post.imageUrl)
+                .fit()
+                .centerCrop()
+                .into(b.ivPostImage)
         }
+
+        val avatarUrl = ownUser?.avatarUrl ?: post.userAvatarUrl
+        if (!avatarUrl.isNullOrBlank()) {
+            Picasso.get()
+                .load(avatarUrl)
+                .fit()
+                .centerCrop()
+                .into(b.ivUserAvatar)
+        }
+
+        if (ownUser != null) {
+            b.btnEdit.visibility = View.VISIBLE
+            b.btnDelete.visibility = View.VISIBLE
+        } else {
+            b.btnEdit.visibility = View.GONE
+            b.btnDelete.visibility = View.GONE
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.post.observe(viewLifecycleOwner) { bindPost() }
 
         viewModel.comments.observe(viewLifecycleOwner) { comments ->
             commentsAdapter.submitList(comments)
             binding?.tvNoComments?.visibility = if (comments.isEmpty()) View.VISIBLE else View.GONE
+        }
+
+        viewModel.currentAppUser.observe(viewLifecycleOwner) { user ->
+            commentsAdapter.currentUser = user
+            bindPost()
         }
 
         viewModel.postDeleted.observe(viewLifecycleOwner) { deleted ->
