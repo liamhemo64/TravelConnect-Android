@@ -42,15 +42,36 @@ class PostRepository private constructor() {
                     post.lastUpdated?.let { if (time < it) time = it }
                 }
                 Post.lastUpdated = time
-                mainHandler.post { completion() }
+
+                val userIds = posts.map { it.userId }.distinct()
+                var remaining = userIds.size
+                if (remaining == 0) {
+                    mainHandler.post { completion() }
+                    return@execute
+                }
+                val fetchedUsers = mutableListOf<com.idz.travelconnect.model.User>()
+                for (uid in userIds) {
+                    firebaseModel.getUserById(uid) { user ->
+                        synchronized(fetchedUsers) {
+                            if (user != null) {
+                                fetchedUsers.add(user)
+                            }
+                            remaining--
+                            if (remaining == 0) {
+                                executor.execute {
+                                    database.userDao.insertUsers(fetchedUsers)
+                                    mainHandler.post { completion() }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
     fun createPost(
         userId: String,
-        userName: String,
-        userAvatarUrl: String?,
         destination: String,
         country: String,
         startDate: String,
@@ -66,8 +87,6 @@ class PostRepository private constructor() {
             val post = Post(
                 id = postId,
                 userId = userId,
-                userName = userName,
-                userAvatarUrl = userAvatarUrl,
                 destination = destination,
                 country = country,
                 startDate = startDate,

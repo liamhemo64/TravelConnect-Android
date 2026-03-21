@@ -11,8 +11,6 @@ import com.idz.travelconnect.TravelConnectApplication
 data class Post(
     @PrimaryKey val id: String,
     val userId: String,
-    val userName: String,
-    val userAvatarUrl: String?,
     val destination: String,
     val country: String,
     val startDate: String,
@@ -39,8 +37,6 @@ data class Post(
 
         const val ID_KEY = "id"
         const val USER_ID_KEY = "userId"
-        const val USER_NAME_KEY = "userName"
-        const val USER_AVATAR_URL_KEY = "userAvatarUrl"
         const val DESTINATION_KEY = "destination"
         const val COUNTRY_KEY = "country"
         const val START_DATE_KEY = "startDate"
@@ -54,8 +50,6 @@ data class Post(
             return Post(
                 id = json[ID_KEY] as? String ?: "",
                 userId = json[USER_ID_KEY] as? String ?: "",
-                userName = json[USER_NAME_KEY] as? String ?: "",
-                userAvatarUrl = json[USER_AVATAR_URL_KEY] as? String,
                 destination = json[DESTINATION_KEY] as? String ?: "",
                 country = json[COUNTRY_KEY] as? String ?: "",
                 startDate = json[START_DATE_KEY] as? String ?: "",
@@ -71,8 +65,6 @@ data class Post(
         get() = hashMapOf(
             ID_KEY to id,
             USER_ID_KEY to userId,
-            USER_NAME_KEY to userName,
-            USER_AVATAR_URL_KEY to userAvatarUrl,
             DESTINATION_KEY to destination,
             COUNTRY_KEY to country,
             START_DATE_KEY to startDate,

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.idz.travelconnect.R
 import com.idz.travelconnect.databinding.FragmentPostDetailsBinding
 import com.idz.travelconnect.features.postdetail.comment.CommentsAdapter
+import com.idz.travelconnect.data.repository.user.UserRepository
 import com.squareup.picasso.Picasso
 
 class PostDetailFragment : Fragment() {
@@ -22,6 +23,7 @@ class PostDetailFragment : Fragment() {
     private val args: PostDetailFragmentArgs by navArgs()
 
     private lateinit var commentsAdapter: CommentsAdapter
+    private val userRepository = UserRepository.shared
 
 
     override fun onCreateView(
@@ -43,7 +45,7 @@ class PostDetailFragment : Fragment() {
 
     private fun setupCommentsRecyclerView() {
         commentsAdapter = CommentsAdapter(
-            currentUserId = viewModel.uid,
+            lifecycleOwner = viewLifecycleOwner,
             onDeleteClick = { comment ->
                 AlertDialog.Builder(requireContext())
                     .setMessage(getString(R.string.delete_comment))
@@ -92,12 +94,22 @@ class PostDetailFragment : Fragment() {
         val post = viewModel.post.value ?: return
         val ownUser = viewModel.currentAppUser.value?.takeIf { it.uid == post.userId }
 
-        binding?.tvLocation?.text = "${post.destination}, ${post.country}"
-        binding?.tvUserName?.text = ownUser?.displayName ?: post.userName
-        binding?.tvDates?.text = "${post.startDate} – ${post.endDate}"
-        binding?.tvDescription?.text = post.description
-
         val b = binding ?: return
+        b.tvLocation.text = "${post.destination}, ${post.country}"
+        b.tvDates.text = "${post.startDate} – ${post.endDate}"
+        b.tvDescription.text = post.description
+
+        if (ownUser != null) {
+            updateUserUi(ownUser.displayName, ownUser.avatarUrl)
+            b.btnEdit.visibility = View.VISIBLE
+            b.btnDelete.visibility = View.VISIBLE
+        } else {
+            userRepository.getUser(post.userId).observe(viewLifecycleOwner) { user ->
+                user?.let { updateUserUi(it.displayName, it.avatarUrl) }
+            }
+            b.btnEdit.visibility = View.GONE
+            b.btnDelete.visibility = View.GONE
+        }
 
         if (!post.imageUrl.isNullOrBlank()) {
             b.ivPostImage.visibility = View.VISIBLE
@@ -107,22 +119,17 @@ class PostDetailFragment : Fragment() {
                 .centerCrop()
                 .into(b.ivPostImage)
         }
+    }
 
-        val avatarUrl = ownUser?.avatarUrl ?: post.userAvatarUrl
+    private fun updateUserUi(userName: String, avatarUrl: String?) {
+        val b = binding ?: return
+        b.tvUserName.text = userName
         if (!avatarUrl.isNullOrBlank()) {
             Picasso.get()
                 .load(avatarUrl)
                 .fit()
                 .centerCrop()
                 .into(b.ivUserAvatar)
-        }
-
-        if (ownUser != null) {
-            b.btnEdit.visibility = View.VISIBLE
-            b.btnDelete.visibility = View.VISIBLE
-        } else {
-            b.btnEdit.visibility = View.GONE
-            b.btnDelete.visibility = View.GONE
         }
     }
 
