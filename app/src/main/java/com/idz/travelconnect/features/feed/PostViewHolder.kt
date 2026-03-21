@@ -19,9 +19,9 @@ class PostViewHolder(
     private val commentRepository = CommentRepository.shared
 
     fun bind(post: Post, currentUser: User?) {
-        val isOwn = currentUser != null && post.userId == currentUser.uid
+        val ownUser = currentUser?.takeIf { it.uid == post.userId }
 
-        binding.tvUserName.text = if (isOwn) currentUser!!.displayName else post.userName
+        binding.tvUserName.text = ownUser?.displayName ?: post.userName
         binding.tvPostLocation.text = "${post.destination}, ${post.country}"
         binding.tvDates.text = "${post.startDate} - ${post.endDate}"
 
@@ -46,7 +46,7 @@ class PostViewHolder(
             binding.ivPostImage.setImageResource(android.R.drawable.ic_menu_gallery)
         }
 
-        val avatarUrl = if (isOwn) currentUser!!.avatarUrl else post.userAvatarUrl
+        val avatarUrl = ownUser?.avatarUrl ?: post.userAvatarUrl
         if (!avatarUrl.isNullOrBlank()) {
             Picasso.get()
                 .load(avatarUrl)
